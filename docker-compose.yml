@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: tailorpro_db
+    environment:
+      POSTGRES_USER: tailorpro_user
+      POSTGRES_PASSWORD: tailorpro_password
+      POSTGRES_DB: tailorpro
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    build: ./Backend
+    container_name: tailorpro_backend
+    environment:
+      - DATABASE_URL=postgresql://tailorpro_user:tailorpro_password@db:5432/tailorpro
+      - SECRET_KEY=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
+      - TELEGRAM_BOT_TOKEN=8716005508:AAE_yu5YKu4BtBpeY372tSLiRDrKgys2-nM
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: always
+    volumes:
+      - ./Backend:/app # Enables hot reloading for local development
+
+  frontend:
+    build: ./frontend
+    container_name: tailorpro_frontend
+    environment:
+      # The browser accesses the backend through the host machine when using Docker Compose.
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: always
+    volumes:
+      - ./frontend:/app # Enables hot reloading for local development
+      - /app/node_modules # Prevents overwriting node_modules inside container
+
+volumes:
+  postgres_data:
