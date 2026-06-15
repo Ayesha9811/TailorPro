@@ -11,6 +11,8 @@ import {
   ChevronRight, CheckCircle2, Download, Printer, RefreshCw, 
   AlertTriangle, Receipt, CreditCard, DollarSign, Ban, Clock, Award
 } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface ColumnDef {
   key: string;
@@ -407,6 +409,145 @@ export default function ReportsPage() {
     window.print();
   };
 
+  const handleDownloadPDF = () => {
+    if (!reportData || reportData.length === 0) return;
+
+    // Create a new jsPDF instance (Landscape, A4)
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const pageTitle = activeConfig.title;
+    const dateRange = `Date Range: ${startDate || 'N/A'} to ${endDate || 'N/A'}`;
+    const generatedOn = `Generated on: ${new Date().toLocaleString()}`;
+
+    // Add Premium Brand Header
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(15, 23, 42); // slate-900
+    doc.text('TailorPro Management System', 14, 15);
+
+    // Business Subtitle / ERP Info
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(100, 116, 139); // slate-500
+    doc.text('ERP Custom Reports Summary • High-fidelity Audit Export', 14, 20);
+
+    // Divider Line
+    doc.setDrawColor(226, 232, 240); // slate-200
+    doc.setLineWidth(0.5);
+    doc.line(14, 24, 283, 24); // A4 Landscape width is ~297mm
+
+    // Active Report Details
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(79, 70, 229); // indigo-600
+    doc.text(pageTitle, 14, 32);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(100, 116, 139); // slate-500
+    doc.text(activeConfig.description, 14, 37);
+
+    // Report Metadata
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(15, 23, 42); // slate-900
+    doc.text(dateRange, 200, 32);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(148, 163, 184); // slate-400
+    doc.text(generatedOn, 200, 37);
+
+    let currentY = 43;
+
+    // Draw KPI Summary Metrics
+    if (metrics && metrics.length > 0) {
+      // Draw background box for KPI Metrics
+      doc.setFillColor(248, 250, 252); // slate-50
+      doc.roundedRect(14, currentY, 269, 18, 2, 2, 'F');
+
+      let metricX = 20;
+      metrics.forEach((m) => {
+        // Label
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(100, 116, 139); // slate-500
+        doc.text(String(m.label).toUpperCase(), metricX, currentY + 5);
+
+        // Value
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(15, 23, 42); // slate-900
+        doc.text(String(m.value), metricX, currentY + 13);
+
+        metricX += 70; // Spacing between KPIs
+      });
+
+      currentY += 24;
+    } else {
+      currentY += 5;
+    }
+
+    // Build Table Headers and Rows
+    const tableHeaders = activeConfig.columns.map(col => col.label);
+    const tableRows = reportData.map(row => 
+      activeConfig.columns.map(col => {
+        const val = row[col.key];
+        if (col.format) {
+          return col.format(val);
+        }
+        return val !== null && val !== undefined ? String(val) : '—';
+      })
+    );
+
+    // Setup column styles based on alignment settings
+    const columnStyles: { [key: number]: any } = {};
+    activeConfig.columns.forEach((col, idx) => {
+      columnStyles[idx] = {
+        halign: col.align === 'right' ? 'right' : col.align === 'center' ? 'center' : 'left'
+      };
+    });
+
+    // Generate AutoTable
+    autoTable(doc, {
+      startY: currentY,
+      head: [tableHeaders],
+      body: tableRows,
+      theme: 'striped',
+      headStyles: {
+        fillColor: [15, 23, 42], // slate-900
+        textColor: [255, 255, 255],
+        fontSize: 8,
+        fontStyle: 'bold',
+        halign: 'left' // Will be overridden by columnStyles if set
+      },
+      bodyStyles: {
+        fontSize: 8,
+        textColor: [51, 65, 85] // slate-700
+      },
+      columnStyles: columnStyles,
+      margin: { left: 14, right: 14 },
+      didDrawPage: (data) => {
+        // Footer on every page
+        const pageCount = (doc as any).internal.getNumberOfPages();
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(148, 163, 184); // slate-400
+        
+        // Center text at the bottom
+        const footerText = `Page ${data.pageNumber} of ${pageCount}`;
+        doc.text(footerText, 140, 200, { align: 'center' });
+      }
+    });
+
+    // Save the PDF
+    doc.save(`${activeReport}_report_${startDate}_to_${endDate}.pdf`);
+  };
+
   const metrics = getSummaryMetrics();
 
   return (
@@ -537,6 +678,15 @@ export default function ReportsPage() {
                 className="gap-1.5 text-xs font-bold bg-white text-slate-700 hover:bg-slate-50 border-slate-200 shadow-sm"
               >
                 <Download className="h-3.5 w-3.5" /> Export CSV
+              </Button>
+              <Button 
+                onClick={handleDownloadPDF} 
+                disabled={reportData.length === 0 || loading} 
+                variant="outline" 
+                size="sm" 
+                className="gap-1.5 text-xs font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border-indigo-200 shadow-sm"
+              >
+                <Download className="h-3.5 w-3.5" /> Download PDF
               </Button>
             </div>
           </div>
