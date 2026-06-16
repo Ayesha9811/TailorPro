@@ -13,6 +13,7 @@ def seed_db():
             {"name": "Super Admin", "permissions": ["all"]},
             {"name": "Owner / Manager", "permissions": ["all"]},
             {"name": "CEO", "permissions": ["all"]},
+            {"name": "Finance", "permissions": ["dashboard", "orders", "invoices", "reports"]},
             {"name": "Cashier", "permissions": ["invoices", "payments", "view_orders", "view_customers", "view_others"]},
             {"name": "Tailor", "permissions": ["measurements", "create_orders", "update_order_status"]}
         ]

@@ -96,7 +96,6 @@ export default function GetOrderPage() {
     switch (status) {
       case 'Order Confirmed': return 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 border-blue-100 dark:border-blue-900/50';
       case 'Stitching Started': return 'bg-yellow-50 dark:bg-yellow-950/40 text-yellow-600 dark:text-yellow-300 border-yellow-100 dark:border-yellow-900/50';
-      case 'Fitting Pending': return 'bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-300 border-orange-100 dark:border-orange-900/50';
       case 'Ready for Collection': return 'bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-300 border-green-100 dark:border-green-900/50';
       case 'Collected': return 'bg-secondary text-foreground/80 border-border';
       case 'Cancelled': return 'bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-300 border-red-100 dark:border-red-900/50';

@@ -15,11 +15,11 @@ import {
 } from 'lucide-react';
 import InvoicePrint from '@/components/invoice-print';
 import { useAuthStore } from '@/store/authStore';
+import { hasEditPermission } from '@/lib/permissions';
 
 const statuses = [
   { name: 'Order Confirmed', icon: ShoppingBag, description: 'Order registered' },
   { name: 'Stitching Started', icon: Scissors, description: 'Tailor assigned' },
-  { name: 'Fitting Pending', icon: Ruler, description: 'Client fitting' },
   { name: 'Ready for Collection', icon: Sparkles, description: 'Quality check ok' },
   { name: 'Collected', icon: Check, description: 'Picked up' }
 ];
@@ -160,7 +160,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
   );
   if (!order) return <div className="text-center py-20 text-slate-500 font-bold">Order workspace details not found.</div>;
 
-  const currentStepIdx = statuses.findIndex(s => s.name === order.status);
+  const currentStepIdx = Math.max(0, statuses.findIndex(s => s.name === order.status));
   const percentPaid = invoice ? (invoice.paid_amount / invoice.total_amount) * 100 : 0;
 
   // Status configuration helper for active glows and styles
@@ -179,17 +179,38 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
   const statusConfig = getStatusConfig(order.status);
 
   // Delivery proximity helper
-  const getDeliveryProximity = (dateStr: string) => {
+  const getDeliveryProximity = (dateStr: string, status: string) => {
     if (!dateStr) return null;
-    const diffTime = new Date(dateStr).getTime() - new Date().getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays < 0) return { text: `${Math.abs(diffDays)} days overdue`, color: 'text-red-500 bg-red-500/5 border-red-500/20' };
-    if (diffDays === 0) return { text: 'Due today', color: 'text-orange-500 bg-orange-500/5 border-orange-500/20 animate-pulse' };
-    if (diffDays === 1) return { text: 'Due tomorrow', color: 'text-amber-500 bg-amber-500/5 border-amber-500/20' };
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const delDate = new Date(dateStr);
+    delDate.setHours(0, 0, 0, 0);
+    
+    const isPendingStatus = status === 'Order Confirmed' || status === 'Stitching Started';
+    
+    // Calculate difference in days
+    const diffTime = delDate.getTime() - today.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 0) {
+      if (isPendingStatus) {
+        return { text: `${Math.abs(diffDays)} days overdue`, color: 'text-red-500 bg-red-500/5 border-red-500/20' };
+      }
+      return null;
+    }
+    if (diffDays === 0) {
+      if (isPendingStatus) {
+        return { text: 'Due today', color: 'text-orange-500 bg-orange-500/5 border-orange-500/20 animate-pulse' };
+      }
+      return null;
+    }
+    if (diffDays === 1) {
+      return { text: 'Due tomorrow', color: 'text-amber-500 bg-amber-500/5 border-amber-500/20' };
+    }
     return { text: `${diffDays} days left`, color: 'text-emerald-500 bg-emerald-500/5 border-emerald-500/20' };
   };
 
-  const deliveryProximity = getDeliveryProximity(order.delivery_date);
+  const deliveryProximity = getDeliveryProximity(order.delivery_date, order.status);
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-16 px-4 sm:px-6 lg:px-8">
@@ -240,14 +261,13 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
             <span className={`h-2.5 w-2.5 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.4)] ${statusConfig.glow}`} />
             <Label className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Workspace Status:</Label>
           </div>
-          <Select value={order.status} onValueChange={handleStatusChange} disabled={user?.role_name === 'Cashier'}>
-            <SelectTrigger className="w-full sm:w-56 bg-slate-900 border-slate-700/80 text-white font-bold shadow-inner focus:ring-indigo-500 focus:ring-2" disabled={user?.role_name === 'Cashier'}>
+          <Select value={order.status} onValueChange={handleStatusChange} disabled={!hasEditPermission(user, '/dashboard/orders')}>
+            <SelectTrigger className="w-full sm:w-56 bg-slate-900 border-slate-700/80 text-white font-bold shadow-inner focus:ring-indigo-500 focus:ring-2" disabled={!hasEditPermission(user, '/dashboard/orders')}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-slate-900 text-white border-slate-800">
               <SelectItem value="Order Confirmed">Order Confirmed</SelectItem>
               <SelectItem value="Stitching Started">Stitching Started</SelectItem>
-              <SelectItem value="Fitting Pending">Fitting Pending</SelectItem>
               <SelectItem value="Ready for Collection">Ready for Collection</SelectItem>
               <SelectItem value="Collected">Collected</SelectItem>
               <SelectItem value="Cancelled">Cancelled</SelectItem>
@@ -264,7 +284,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
               <Activity className="w-3.5 h-3.5 text-indigo-600" /> Production Lifecycle Progress
             </CardTitle>
             <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
-              Stage {currentStepIdx + 1} of 5
+              Stage {currentStepIdx + 1} of {statuses.length}
             </span>
           </CardHeader>
           <CardContent className="py-10 px-4 sm:px-8">
@@ -406,7 +426,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                   size="sm" 
                   className="gap-1.5 text-xs h-8 font-bold text-slate-700 border-slate-200 hover:bg-slate-50 shadow-xs" 
                   onClick={() => setIsEditing(true)}
-                  disabled={user?.role_name === 'Cashier' || user?.role_name === 'Tailor'}
+                  disabled={!hasEditPermission(user, '/dashboard/orders')}
                 >
                   <Pencil className="w-3.5 h-3.5" /> Edit Specs
                 </Button>
@@ -430,7 +450,12 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-xs font-bold text-slate-500 uppercase">Delivery Date</Label>
-                    <Input type="date" value={editData.delivery_date} onChange={e => setEditData({...editData, delivery_date: e.target.value})} />
+                    <Input 
+                      type="date" 
+                      value={editData.delivery_date} 
+                      onChange={e => setEditData({...editData, delivery_date: e.target.value})} 
+                      disabled={!!order.delivery_date && !['Super Admin', 'Owner / Manager', 'CEO'].includes(user?.role_name || '')}
+                    />
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-xs font-bold text-slate-500 uppercase">Fabric Source</Label>
@@ -618,7 +643,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
           )}
  
           {/* Payment Collect Terminal */}
-          {invoice && invoice.balance_amount > 0 && user?.role_name !== 'Tailor' && (
+          {invoice && invoice.balance_amount > 0 && hasEditPermission(user, '/dashboard/invoices') && (
             <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 rounded-2xl bg-white">
               <CardHeader className="pb-3 border-b border-slate-100 bg-slate-50/30">
                 <CardTitle className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">

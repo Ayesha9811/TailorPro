@@ -14,9 +14,18 @@ import {
   ShieldCheck, AlertCircle, Search, Calendar, UserCheck
 } from 'lucide-react';
 
+import { hasEditPermission } from '@/lib/permissions';
+
 export default function SettingsPage() {
   const { user, fetchUser } = useAuthStore();
-  const isAdmin = ['Super Admin', 'Owner / Manager', 'CEO'].includes(user?.role_name || '');
+  
+  // Can view user list if they have permission to users page
+  const canViewUsersList = user?.permissions && user.permissions.length > 0
+    ? user.permissions.includes('/dashboard/users')
+    : ['Super Admin', 'Owner / Manager', 'CEO'].includes(user?.role_name || '');
+
+  // Can edit settings if they have edit permission to settings module
+  const canEditCompany = hasEditPermission(user, '/dashboard/settings');
 
   // Loading and alerts
   const [loadingCompany, setLoadingCompany] = useState(true);
@@ -89,7 +98,7 @@ export default function SettingsPage() {
 
   // Fetch Registered Users List (Admin Only)
   const fetchUsers = async () => {
-    if (!isAdmin) return;
+    if (!canViewUsersList) return;
     try {
       setLoadingUsers(true);
       const res = await api.get('/users');
@@ -104,7 +113,7 @@ export default function SettingsPage() {
   useEffect(() => {
     fetchCompanyDetails();
     fetchProfileDetails();
-    if (isAdmin) {
+    if (canViewUsersList) {
       fetchUsers();
     }
   }, [user]);
@@ -112,7 +121,7 @@ export default function SettingsPage() {
   // Handle Save Company Details
   const handleSaveCompany = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isAdmin) return;
+    if (!canEditCompany) return;
     setSuccessMsg('');
     setErrorMsg('');
     setSavingCompany(true);
@@ -200,7 +209,7 @@ export default function SettingsPage() {
             <User className="h-4 w-4" />
             My Profile
           </TabsTrigger>
-          {isAdmin && (
+          {canViewUsersList && (
             <TabsTrigger value="users" className="gap-2 px-4 py-2">
               <Users className="h-4 w-4" />
               All Registered Profiles
@@ -217,7 +226,7 @@ export default function SettingsPage() {
                   <CardTitle className="text-lg font-bold">Company Profile</CardTitle>
                   <CardDescription>Verify or configure tailorshop details shown on invoice prints.</CardDescription>
                 </div>
-                {!isAdmin && (
+                {!canEditCompany && (
                   <Badge variant="secondary" className="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 py-1 px-3 border">
                     Read-Only (Admin Access Required)
                   </Badge>
@@ -240,7 +249,7 @@ export default function SettingsPage() {
                           value={companyDetails.name}
                           onChange={(e) => setCompanyDetails({ ...companyDetails, name: e.target.value })}
                           placeholder="e.g. TailorPro Colombo"
-                          disabled={!isAdmin}
+                          disabled={!canEditCompany}
                           className="pl-9"
                           required
                         />
@@ -257,7 +266,7 @@ export default function SettingsPage() {
                           value={companyDetails.number}
                           onChange={(e) => setCompanyDetails({ ...companyDetails, number: e.target.value })}
                           placeholder="e.g. +94 11 234 5678"
-                          disabled={!isAdmin}
+                          disabled={!canEditCompany}
                           className="pl-9"
                           required
                         />
@@ -274,7 +283,7 @@ export default function SettingsPage() {
                           value={companyDetails.email}
                           onChange={(e) => setCompanyDetails({ ...companyDetails, email: e.target.value })}
                           placeholder="e.g. contact@tailorpro.com"
-                          disabled={!isAdmin}
+                          disabled={!canEditCompany}
                           className="pl-9"
                         />
                       </div>
@@ -290,7 +299,7 @@ export default function SettingsPage() {
                           value={companyDetails.website}
                           onChange={(e) => setCompanyDetails({ ...companyDetails, website: e.target.value })}
                           placeholder="e.g. www.tailorpro.com"
-                          disabled={!isAdmin}
+                          disabled={!canEditCompany}
                           className="pl-9"
                         />
                       </div>
@@ -307,7 +316,7 @@ export default function SettingsPage() {
                         value={companyDetails.address}
                         onChange={(e) => setCompanyDetails({ ...companyDetails, address: e.target.value })}
                         placeholder="e.g. 123 Galle Road, Colombo 03, Sri Lanka"
-                        disabled={!isAdmin}
+                        disabled={!canEditCompany}
                         className="w-full min-h-[80px] rounded-md border border-input bg-transparent px-3 py-2 pl-9 text-sm shadow-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                         required
                       />
@@ -322,12 +331,12 @@ export default function SettingsPage() {
                       value={companyDetails.description}
                       onChange={(e) => setCompanyDetails({ ...companyDetails, description: e.target.value })}
                       placeholder="e.g. Thank you for your business! Items left past 30 days will be discarded."
-                      disabled={!isAdmin}
+                      disabled={!canEditCompany}
                       className="w-full min-h-[60px] rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     />
                   </div>
 
-                  {isAdmin && (
+                  {canEditCompany && (
                     <div className="pt-4 border-t flex justify-end">
                       <Button
                         type="submit"
@@ -448,7 +457,7 @@ export default function SettingsPage() {
         </TabsContent>
 
         {/* Tab 3: Registered Profiles List (Admin Only) */}
-        {isAdmin && (
+        {canViewUsersList && (
           <TabsContent value="users">
             <Card className="shadow-sm border-slate-200 dark:border-slate-800">
               <CardHeader className="border-b pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

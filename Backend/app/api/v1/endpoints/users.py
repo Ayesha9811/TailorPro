@@ -34,6 +34,7 @@ def read_user_me(
         "full_name": current_user.full_name,
         "role_id": current_user.role_id,
         "role_name": role_name,
+        "permissions": current_user.permissions or [],
         "is_active": current_user.is_active,
         "created_at": current_user.created_at,
         "staff": staff_data
@@ -92,6 +93,7 @@ def update_user_me(
         "full_name": current_user.full_name,
         "role_id": current_user.role_id,
         "role_name": role_name,
+        "permissions": current_user.permissions or [],
         "is_active": current_user.is_active,
         "created_at": current_user.created_at,
         "staff": staff_data

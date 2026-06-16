@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Search, UserPlus, Eye } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
+import { hasEditPermission } from '@/lib/permissions';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function CustomersPage() {
@@ -72,7 +73,7 @@ export default function CustomersPage() {
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Customer Directory</h1>
           <p className="text-slate-500 text-sm mt-1">{filteredCustomers.length} of {customers.length} profiles shown</p>
         </div>
-        {user?.role_name !== 'Cashier' && (
+        {hasEditPermission(user, '/dashboard/customers') && (
           <Link href="/dashboard/orders/unified">
             <Button className="bg-slate-900 text-white hover:bg-slate-800 shadow-md gap-2">
               <UserPlus className="w-4 h-4" /> New Walk-in Order

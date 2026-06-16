@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { X, Plus, AlertCircle } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
+import { hasEditPermission } from '@/lib/permissions';
 
 function UnifiedOrderForm() {
   const router = useRouter();
@@ -20,7 +21,7 @@ function UnifiedOrderForm() {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("customer");
 
-  if (user && user.role_name === 'Cashier') {
+  if (user && !hasEditPermission(user, '/dashboard/orders/unified')) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[65vh] text-center p-8 bg-white/50 backdrop-blur-md rounded-2xl border border-red-100 shadow-xl max-w-2xl mx-auto my-12 animate-in fade-in slide-in-from-bottom-4 duration-300">
         <div className="p-4 bg-red-50 text-red-500 rounded-full mb-6 ring-8 ring-red-50/50 animate-pulse">
@@ -28,7 +29,7 @@ function UnifiedOrderForm() {
         </div>
         <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">Access Denied</h2>
         <p className="text-slate-500 mt-3 max-w-md leading-relaxed text-sm">
-          Cashiers are restricted from entering orders into the system. Only Tailors, Managers, or Admins can create new orders.
+          You do not have permission to enter or create orders in the system.
         </p>
         <div className="mt-8">
           <Button onClick={() => router.push('/dashboard/orders')} className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold">

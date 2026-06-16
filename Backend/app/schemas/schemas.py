@@ -16,6 +16,7 @@ class UserBase(BaseModel):
     email: EmailStr
     full_name: str
     is_active: Optional[bool] = True
+    permissions: Optional[List[str]] = []
 
 class UserCreate(UserBase):
     password: str
@@ -251,6 +252,7 @@ class UserUpdate(BaseModel):
     password: Optional[str] = None
     role_id: Optional[int] = None
     is_active: Optional[bool] = None
+    permissions: Optional[List[str]] = None
     # Staff fields
     staff_type: Optional[StaffType] = None
     mobile_number: Optional[str] = None
@@ -269,6 +271,7 @@ class UserCreatePayload(BaseModel):
     password: str
     role_id: int
     is_active: Optional[bool] = True
+    permissions: Optional[List[str]] = []
     # Staff fields
     staff_type: Optional[StaffType] = None
     mobile_number: Optional[str] = None

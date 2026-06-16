@@ -67,21 +67,25 @@ def get_dashboard_stats(
         ])
     ).count()
     
-    # Delayed orders: delivery date is in the past and not COLLECTED or CANCELLED
+    # Delayed orders: delivery date is in the past, and status is Order Confirmed or Stitching Started
     today_start = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
     delayed_orders = db.query(models.Order).filter(
         models.Order.delivery_date < today_start,
-        ~models.Order.status.in_([
-            models.OrderStatus.COLLECTED,
-            models.OrderStatus.CANCELLED
+        models.Order.status.in_([
+            models.OrderStatus.CONFIRMED,
+            models.OrderStatus.STITCHING_STARTED
         ])
     ).count()
     
-    # Orders due today
+    # Orders due today: delivery date is today, and status is Order Confirmed or Stitching Started
     today_end = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
     due_today = db.query(models.Order).filter(
         models.Order.delivery_date >= today_start,
-        models.Order.delivery_date <= today_end
+        models.Order.delivery_date <= today_end,
+        models.Order.status.in_([
+            models.OrderStatus.CONFIRMED,
+            models.OrderStatus.STITCHING_STARTED
+        ])
     ).count()
     
     # Ready for collection
@@ -168,7 +172,7 @@ def get_dashboard_stats(
 @router.get("/reports", response_model=Dict[str, Any])
 def get_reports_stats(
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(deps.RoleChecker(["Super Admin", "Owner / Manager", "CEO"]))
+    current_user: models.User = Depends(deps.RoleChecker(["Super Admin", "Owner / Manager", "CEO", "Finance"]))
 ):
     """Fetch rich analytics data for visual reporting."""
     
@@ -211,8 +215,7 @@ def get_reports_stats(
             models.Order.assigned_tailor_id == t.id,
             models.Order.status.in_([
                 models.OrderStatus.CONFIRMED,
-                models.OrderStatus.STITCHING_STARTED,
-                models.OrderStatus.FITTING_PENDING
+                models.OrderStatus.STITCHING_STARTED
             ])
         ).count()
         workload.append({
@@ -254,7 +257,7 @@ def run_report(
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(deps.RoleChecker(["Super Admin", "Owner / Manager", "CEO"]))
+    current_user: models.User = Depends(deps.RoleChecker(["Super Admin", "Owner / Manager", "CEO", "Finance"]))
 ):
     """Compile dynamic analytics data for a selected report type, filtered by date range."""
     from typing import List
@@ -462,10 +465,10 @@ def run_report(
 
     # 8. Delayed Orders Report
     elif type == "delayed_orders":
-        # Expected delivery is in past, and order is not collected, not cancelled
+        # Expected delivery is in past, and status is Order Confirmed or Stitching Started
         today_now = datetime.datetime.now()
         query = db.query(models.Order).select_from(models.Order).join(models.Customer, models.Order.customer).filter(
-            ~models.Order.status.in_([models.OrderStatus.COLLECTED, models.OrderStatus.CANCELLED]),
+            models.Order.status.in_([models.OrderStatus.CONFIRMED, models.OrderStatus.STITCHING_STARTED]),
             models.Order.delivery_date < today_now
         )
         if start_dt:
@@ -506,8 +509,7 @@ def run_report(
             active_orders = orders_q.filter(
                 models.Order.status.in_([
                     models.OrderStatus.CONFIRMED, 
-                    models.OrderStatus.STITCHING_STARTED, 
-                    models.OrderStatus.FITTING_PENDING
+                    models.OrderStatus.STITCHING_STARTED
                 ])
             ).count()
             completed_orders = orders_q.filter(
@@ -520,7 +522,10 @@ def run_report(
             today_now = datetime.datetime.now()
             delayed_orders = orders_q.filter(
                 models.Order.delivery_date < today_now,
-                ~models.Order.status.in_([models.OrderStatus.COLLECTED, models.OrderStatus.CANCELLED])
+                models.Order.status.in_([
+                    models.OrderStatus.CONFIRMED,
+                    models.OrderStatus.STITCHING_STARTED
+                ])
             ).count()
             
             performance.append({

@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import InvoicePrint from '@/components/invoice-print';
 import { useAuthStore } from '@/store/authStore';
+import { hasEditPermission } from '@/lib/permissions';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 function InvoicesPageContent() {
@@ -385,7 +386,7 @@ function InvoicesPageContent() {
                           >
                             <Eye className="h-4 w-4" />
                           </button>
-                          {inv.balance_amount > 0 && user?.role_name !== 'Tailor' && (
+                          {inv.balance_amount > 0 && hasEditPermission(user, '/dashboard/invoices') && (
                             <button
                               onClick={() => openPaymentForm(inv)}
                               className="px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-900 text-white hover:bg-slate-800 transition-colors"
@@ -411,7 +412,7 @@ function InvoicesPageContent() {
             <div className="bg-slate-950 text-white px-6 py-4 flex justify-between items-center no-print">
               <h3 className="font-bold text-lg">Billing Details & Print Copy</h3>
               <div className="flex items-center gap-3">
-                {selectedInvoice.balance_amount > 0 && user?.role_name !== 'Tailor' && (
+                {selectedInvoice.balance_amount > 0 && hasEditPermission(user, '/dashboard/invoices') && (
                   <Button 
                     onClick={() => {
                       setShowInvoiceModal(false);

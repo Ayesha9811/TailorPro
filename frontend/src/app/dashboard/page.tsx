@@ -404,7 +404,6 @@ export default function DashboardPage() {
                         className={`h-full rounded-full transition-all duration-500 group-hover/row:scale-x-[1.01] group-hover/row:brightness-110 ${
                           status === 'Order Confirmed' ? 'bg-primary' :
                           status === 'Stitching Started' ? 'bg-blue-500' :
-                          status === 'Fitting Pending' ? 'bg-amber-500' :
                           status === 'Ready for Collection' ? 'bg-emerald-500' :
                           status === 'Collected' ? 'bg-green-500' :
                           'bg-red-500'

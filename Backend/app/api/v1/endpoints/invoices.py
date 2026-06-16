@@ -9,8 +9,8 @@ from app.models import models
 
 router = APIRouter()
 
-# Enforce access for Super Admin, Owner / Manager, CEO, Cashier, Tailor
-allowed_roles = ["Super Admin", "Owner / Manager", "CEO", "Cashier", "Tailor"]
+# Enforce access for Super Admin, Owner / Manager, CEO, Cashier, Tailor, Finance
+allowed_roles = ["Super Admin", "Owner / Manager", "CEO", "Cashier", "Tailor", "Finance"]
 invoice_access = deps.RoleChecker(allowed_roles)
 
 @router.get("/", response_model=List[schemas.InvoiceResponse])

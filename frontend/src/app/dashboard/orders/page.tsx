@@ -96,10 +96,12 @@ function OrdersPageContent() {
       } else if (statusFilter === 'delayed') {
         const todayStart = new Date();
         todayStart.setHours(0, 0, 0, 0);
-        matchesStatus = o.delivery_date && new Date(o.delivery_date) < todayStart && o.status !== 'Collected' && o.status !== 'Cancelled';
+        matchesStatus = o.delivery_date && new Date(o.delivery_date) < todayStart && 
+          (o.status === 'Order Confirmed' || o.status === 'Stitching Started');
       } else if (statusFilter === 'duetoday') {
         const todayStr = new Date().toDateString();
-        matchesStatus = o.delivery_date && new Date(o.delivery_date).toDateString() === todayStr;
+        matchesStatus = o.delivery_date && new Date(o.delivery_date).toDateString() === todayStr &&
+          (o.status === 'Order Confirmed' || o.status === 'Stitching Started');
       } else {
         matchesStatus = o.status === statusFilter;
       }
@@ -174,7 +176,6 @@ function OrdersPageContent() {
                   <SelectItem value="duetoday">Due Today</SelectItem>
                   <SelectItem value="Order Confirmed">Order Confirmed</SelectItem>
                   <SelectItem value="Stitching Started">Stitching Started</SelectItem>
-                  <SelectItem value="Fitting Pending">Fitting Pending</SelectItem>
                   <SelectItem value="Ready for Collection">Ready for Collection</SelectItem>
                   <SelectItem value="Collected">Collected</SelectItem>
                   <SelectItem value="Cancelled">Cancelled</SelectItem>

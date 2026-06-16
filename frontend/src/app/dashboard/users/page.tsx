@@ -10,6 +10,20 @@ import {
   Search, X, Key, Mail, Phone, User 
 } from 'lucide-react';
 
+import { defaultRolePermissions, defaultRoleEditPermissions } from '@/lib/permissions';
+
+const AVAILABLE_PERMISSIONS = [
+  { name: 'Dashboard Overview', path: '/dashboard' },
+  { name: 'New Order Creation', path: '/dashboard/orders/unified' },
+  { name: 'Customers Directory', path: '/dashboard/customers' },
+  { name: 'Orders List', path: '/dashboard/orders' },
+  { name: 'Invoices & Payments', path: '/dashboard/invoices' },
+  { name: 'Financial & Workload Reports', path: '/dashboard/reports' },
+  { name: 'System Notifications', path: '/dashboard/notifications' },
+  { name: 'User & Staff Profiles', path: '/dashboard/users' },
+  { name: 'ERP System Settings', path: '/dashboard/settings' },
+];
+
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
   const [roles, setRoles] = useState<any[]>([]);
@@ -30,6 +44,7 @@ export default function UsersPage() {
   const [staffType, setStaffType] = useState('Tailor');
   const [mobileNumber, setMobileNumber] = useState('');
   const [isActive, setIsActive] = useState(true);
+  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
 
   // Load data
   const fetchData = async () => {
@@ -63,8 +78,14 @@ export default function UsersPage() {
       if (roleObj.name === 'Super Admin') setStaffType('Super Admin');
       else if (roleObj.name === 'Owner / Manager') setStaffType('Manager');
       else if (roleObj.name === 'CEO') setStaffType('Manager');
+      else if (roleObj.name === 'Finance') setStaffType('Finance');
       else if (roleObj.name === 'Cashier') setStaffType('Cashier');
       else setStaffType('Tailor');
+
+      // Update permissions checklist to defaults for role (both path and edit permissions combined)
+      const defaultPaths = defaultRolePermissions[roleObj.name] || [];
+      const defaultEdits = defaultRoleEditPermissions[roleObj.name] || [];
+      setSelectedPermissions([...defaultPaths, ...defaultEdits]);
     }
   };
 
@@ -78,19 +99,33 @@ export default function UsersPage() {
     setStaffType('Tailor');
     setMobileNumber('');
     setIsActive(true);
+    
+    const defaultPaths = defaultRolePermissions['Tailor'] || [];
+    const defaultEdits = defaultRoleEditPermissions['Tailor'] || [];
+    setSelectedPermissions([...defaultPaths, ...defaultEdits]);
+    
     setIsOpen(true);
   };
 
-  const openEditModal = (user: any) => {
+  const openEditModal = (usr: any) => {
     setIsEditMode(true);
-    setSelectedUser(user);
-    setFullName(user.full_name);
-    setEmail(user.email);
+    setSelectedUser(usr);
+    setFullName(usr.full_name);
+    setEmail(usr.email);
     setPassword(''); // Leave blank
-    setRoleId(user.role_id);
-    setStaffType(user.staff?.staff_type || 'Tailor');
-    setMobileNumber(user.staff?.mobile_number || '');
-    setIsActive(user.is_active);
+    setRoleId(usr.role_id);
+    setStaffType(usr.staff?.staff_type || 'Tailor');
+    setMobileNumber(usr.staff?.mobile_number || '');
+    setIsActive(usr.is_active);
+    
+    if (usr.permissions && usr.permissions.length > 0) {
+      setSelectedPermissions(usr.permissions);
+    } else {
+      const defaultPaths = defaultRolePermissions[usr.role_name] || [];
+      const defaultEdits = defaultRoleEditPermissions[usr.role_name] || [];
+      setSelectedPermissions([...defaultPaths, ...defaultEdits]);
+    }
+    
     setIsOpen(true);
   };
 
@@ -106,7 +141,8 @@ export default function UsersPage() {
       staff_type: staffType,
       mobile_number: mobileNumber,
       salary: 0.0,
-      commission_rate: 0.0
+      commission_rate: 0.0,
+      permissions: selectedPermissions
     };
 
     if (password) {
@@ -252,16 +288,24 @@ export default function UsersPage() {
                       <td className="px-6 py-4 font-semibold text-slate-900">{u.full_name}</td>
                       <td className="px-6 py-4 text-slate-600">{u.email}</td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                          u.role_name === 'Super Admin' ? 'bg-red-50 text-red-700 border border-red-200' :
-                          u.role_name === 'Owner / Manager' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
-                          u.role_name === 'CEO' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' :
-                          u.role_name === 'Cashier' ? 'bg-green-50 text-green-700 border border-green-200' :
-                          u.role_name === 'Tailor' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
-                          'bg-slate-50 text-slate-700 border border-slate-200'
-                        }`}>
-                          {u.role_name}
-                        </span>
+                        <div className="flex flex-col gap-1">
+                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                            u.role_name === 'Super Admin' ? 'bg-red-50 text-red-700 border border-red-200' :
+                            u.role_name === 'Owner / Manager' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                            u.role_name === 'CEO' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' :
+                            u.role_name === 'Finance' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                            u.role_name === 'Cashier' ? 'bg-green-50 text-green-700 border border-green-200' :
+                            u.role_name === 'Tailor' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
+                            'bg-slate-50 text-slate-700 border border-slate-200'
+                          }`}>
+                            {u.role_name}
+                          </span>
+                          {u.permissions && u.permissions.length > 0 && (
+                            <span className="text-[10px] text-indigo-500 font-bold tracking-tight">
+                              Custom: {u.permissions.length} pages
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4 text-slate-500">{u.staff?.mobile_number || 'N/A'}</td>
                       <td className="px-6 py-4">
@@ -397,6 +441,71 @@ export default function UsersPage() {
                     />
                     <span className="text-sm font-semibold text-slate-700">Account is Active</span>
                   </label>
+                </div>
+
+                {/* Customizable Accessible Pages & Permissions */}
+                <div className="col-span-2 border-t pt-4">
+                  <span className="text-xs font-bold text-slate-500 uppercase block mb-3">Custom Accessible Pages / Permissions</span>
+                  <div className="overflow-x-auto bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <table className="w-full text-left text-xs font-semibold text-slate-700">
+                      <thead>
+                        <tr className="border-b text-slate-500 font-bold uppercase tracking-wider">
+                          <th className="pb-2">Module / Page</th>
+                          <th className="pb-2 text-center w-24">View</th>
+                          <th className="pb-2 text-center w-24">Edit</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200/60">
+                        {AVAILABLE_PERMISSIONS.map((perm) => {
+                          const hasView = selectedPermissions.includes(perm.path);
+                          const hasEdit = selectedPermissions.includes(`edit:${perm.path}`);
+                          
+                          // Hide or disable edit toggle for read-only pages like Dashboard and Reports
+                          const isEditApplicable = perm.path !== '/dashboard' && perm.path !== '/dashboard/reports';
+
+                          return (
+                            <tr key={perm.path} className="hover:bg-slate-200/30">
+                              <td className="py-2.5 font-bold">{perm.name}</td>
+                              <td className="py-2.5 text-center">
+                                <input
+                                  type="checkbox"
+                                  checked={hasView}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setSelectedPermissions(prev => [...prev, perm.path]);
+                                    } else {
+                                      // Remove view and also edit if view is unchecked
+                                      setSelectedPermissions(prev => prev.filter(p => p !== perm.path && p !== `edit:${perm.path}`));
+                                    }
+                                  }}
+                                  className="h-4.5 w-4.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer"
+                                />
+                              </td>
+                              <td className="py-2.5 text-center">
+                                {isEditApplicable ? (
+                                  <input
+                                    type="checkbox"
+                                    checked={hasEdit}
+                                    disabled={!hasView} // Can only edit if view is allowed
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        setSelectedPermissions(prev => [...prev, `edit:${perm.path}`]);
+                                      } else {
+                                        setSelectedPermissions(prev => prev.filter(p => p !== `edit:${perm.path}`));
+                                      }
+                                    }}
+                                    className="h-4.5 w-4.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                                  />
+                                ) : (
+                                  <span className="text-slate-400 font-normal">N/A</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
 

@@ -93,12 +93,50 @@ def update_order_details(
     order_id: int, 
     update_data: schemas.OrderUpdate, 
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(deps.RoleChecker(["Super Admin", "Owner / Manager", "CEO"]))
+    current_user: models.User = Depends(deps.get_current_active_user)
 ):
     """Update editable fields of an order (fabric, delivery date, remarks, etc.)."""
-    result = crud.update_order(db, order_id=order_id, update_data=update_data)
-    if not result:
+    is_admin = current_user.role and current_user.role.name in ["Super Admin", "Owner / Manager", "CEO"]
+    
+    # Check custom permissions or role defaults
+    has_edit_permission = False
+    if is_admin:
+        has_edit_permission = True
+    elif current_user.permissions:
+        has_edit_permission = "edit:/dashboard/orders" in current_user.permissions
+    else:
+        # Fallback to role defaults
+        role_name = current_user.role.name if current_user.role else ""
+        has_edit_permission = role_name in ["Tailor", "Cashier"]
+
+    if not has_edit_permission:
+        raise HTTPException(
+            status_code=403,
+            detail="Operation not permitted"
+        )
+        
+    # Fetch existing order to check current delivery_date
+    db_order = crud.get_order(db, order_id=order_id)
+    if not db_order:
         raise HTTPException(status_code=404, detail="Order not found")
+        
+    update_dict = update_data.model_dump(exclude_unset=True)
+    if "delivery_date" in update_dict:
+        new_date = update_dict["delivery_date"]
+        # If order.delivery_date is already set, and new_date is different or cleared
+        if db_order.delivery_date is not None:
+            # Normalize dates for clean comparison
+            db_date_val = db_order.delivery_date.isoformat() if hasattr(db_order.delivery_date, "isoformat") else db_order.delivery_date
+            new_date_val = new_date.isoformat() if new_date and hasattr(new_date, "isoformat") else new_date
+            
+            if new_date is None or db_date_val != new_date_val:
+                if not is_admin:
+                    raise HTTPException(
+                        status_code=403,
+                        detail="Only Super Admin and Managers can change the delivery date once set."
+                    )
+
+    result = crud.update_order(db, order_id=order_id, update_data=update_data)
     return result
 
 @router.get("/track/{query}", response_model=List[schemas.OrderResponse])

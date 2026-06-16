@@ -23,13 +23,9 @@ const navItems = [
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ];
 
-const roleRoutes: Record<string, string[]> = {
-  'Super Admin': ['/dashboard', '/dashboard/customers', '/dashboard/orders', '/dashboard/orders/unified', '/dashboard/invoices', '/dashboard/reports', '/dashboard/notifications', '/dashboard/users', '/dashboard/settings'],
-  'Owner / Manager': ['/dashboard', '/dashboard/customers', '/dashboard/orders', '/dashboard/orders/unified', '/dashboard/invoices', '/dashboard/reports', '/dashboard/notifications', '/dashboard/users', '/dashboard/settings'],
-  'CEO': ['/dashboard', '/dashboard/customers', '/dashboard/orders', '/dashboard/orders/unified', '/dashboard/invoices', '/dashboard/reports', '/dashboard/notifications', '/dashboard/users', '/dashboard/settings'],
-  'Cashier': ['/dashboard', '/dashboard/customers', '/dashboard/orders', '/dashboard/invoices', '/dashboard/notifications', '/dashboard/users', '/dashboard/settings'],
-  'Tailor': ['/dashboard', '/dashboard/customers', '/dashboard/orders', '/dashboard/orders/unified', '/dashboard/invoices', '/dashboard/notifications', '/dashboard/settings'],
-};
+import { defaultRolePermissions } from '@/lib/permissions';
+
+const roleRoutes = defaultRolePermissions;
 
 export default function DashboardLayout({
   children,
@@ -136,7 +132,9 @@ export default function DashboardLayout({
   }
 
   const userRole = user?.role_name || '';
-  const allowed = roleRoutes[userRole] || [];
+  const allowed: string[] = user?.permissions && user.permissions.length > 0
+    ? user.permissions
+    : (roleRoutes[userRole] || []);
   
   const filteredNavItems = navItems.filter(item => 
     allowed.some(route => item.href === route)
@@ -145,6 +143,8 @@ export default function DashboardLayout({
   const isAllowedPath = allowed.some(route => 
     pathname === route || pathname.startsWith(route + '/')
   );
+
+  console.log("pathname:", pathname, "allowed:", allowed, "isAllowedPath:", isAllowedPath);
 
   return (
     <div className="flex h-screen bg-background text-foreground">

@@ -403,6 +403,7 @@ def get_users_with_staff(db: Session, skip: int = 0, limit: int = 100):
             "is_active": u.is_active,
             "role_id": u.role_id,
             "role_name": role_name,
+            "permissions": u.permissions or [],
             "created_at": u.created_at,
             "updated_at": u.updated_at,
             "staff": staff_data
@@ -421,7 +422,8 @@ def create_user_with_staff(db: Session, payload: schemas.UserCreatePayload):
         full_name=payload.full_name,
         hashed_password=hashed_pwd,
         role_id=payload.role_id,
-        is_active=payload.is_active
+        is_active=payload.is_active,
+        permissions=payload.permissions or []
     )
     db.add(db_user)
     db.flush()
@@ -457,6 +459,8 @@ def update_user_with_staff(db: Session, user_id: int, payload: schemas.UserUpdat
         db_user.role_id = payload.role_id
     if payload.is_active is not None:
         db_user.is_active = payload.is_active
+    if payload.permissions is not None:
+        db_user.permissions = payload.permissions
 
     if payload.staff_type is not None:
         db_staff = db_user.staff_profile

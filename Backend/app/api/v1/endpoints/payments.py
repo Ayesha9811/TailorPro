@@ -9,12 +9,12 @@ from app.models import models
 
 router = APIRouter()
 
-# Enforce write access only for Super Admin, Owner / Manager, CEO, Cashier
-allowed_write_roles = ["Super Admin", "Owner / Manager", "CEO", "Cashier"]
+# Enforce write access only for Super Admin, Owner / Manager, CEO, Cashier, Finance
+allowed_write_roles = ["Super Admin", "Owner / Manager", "CEO", "Cashier", "Finance"]
 write_access = deps.RoleChecker(allowed_write_roles)
 
-# Enforce read access for Super Admin, Owner / Manager, CEO, Cashier, Tailor
-allowed_read_roles = ["Super Admin", "Owner / Manager", "CEO", "Cashier", "Tailor"]
+# Enforce read access for Super Admin, Owner / Manager, CEO, Cashier, Tailor, Finance
+allowed_read_roles = ["Super Admin", "Owner / Manager", "CEO", "Cashier", "Tailor", "Finance"]
 read_access = deps.RoleChecker(allowed_read_roles)
 
 @router.post("/", response_model=schemas.Payment)
