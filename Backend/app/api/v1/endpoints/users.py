@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from typing import List
 from app.api import deps
@@ -43,6 +43,7 @@ def read_user_me(
 @router.put("/me", response_model=schemas.UserWithStaff)
 def update_user_me(
     payload: schemas.ProfileUpdate,
+    request: Request,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user)
 ):
@@ -75,6 +76,14 @@ def update_user_me(
             
     db.commit()
     db.refresh(current_user)
+    
+    crud.create_activity_log(
+        db=db,
+        user_id=current_user.id,
+        action="Update Profile",
+        details=f"Updated own user profile (email: {current_user.email}, name: {current_user.full_name})",
+        ip_address=request.client.host if request.client else None
+    )
     
     role_name = current_user.role.name if current_user.role else "Unknown"
     staff_data = None
@@ -120,6 +129,7 @@ def read_roles(
 @router.post("/", response_model=schemas.User)
 def create_user(
     payload: schemas.UserCreatePayload,
+    request: Request,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(admin_or_manager_only)
 ):
@@ -130,12 +140,21 @@ def create_user(
             status_code=400,
             detail="A user with this email already exists"
         )
-    return crud.create_user_with_staff(db=db, payload=payload)
+    result = crud.create_user_with_staff(db=db, payload=payload)
+    crud.create_activity_log(
+        db=db,
+        user_id=current_user.id,
+        action="Register User",
+        details=f"Registered user {result.full_name} ({result.email})",
+        ip_address=request.client.host if request.client else None
+    )
+    return result
 
 @router.put("/{user_id}", response_model=schemas.User)
 def update_user(
     user_id: int,
     payload: schemas.UserUpdate,
+    request: Request,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(admin_or_manager_only)
 ):
@@ -146,11 +165,19 @@ def update_user(
             status_code=404,
             detail="User not found"
         )
+    crud.create_activity_log(
+        db=db,
+        user_id=current_user.id,
+        action="Update User",
+        details=f"Updated user ID {user_id} details (name: {updated_user.full_name}, email: {updated_user.email})",
+        ip_address=request.client.host if request.client else None
+    )
     return updated_user
 
 @router.delete("/{user_id}", response_model=bool)
 def deactivate_user(
     user_id: int,
+    request: Request,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(admin_or_manager_only)
 ):
@@ -161,4 +188,11 @@ def deactivate_user(
             status_code=404,
             detail="User not found"
         )
+    crud.create_activity_log(
+        db=db,
+        user_id=current_user.id,
+        action="Deactivate User",
+        details=f"Deactivated user ID {user_id}",
+        ip_address=request.client.host if request.client else None
+    )
     return True

@@ -101,7 +101,7 @@ export default function NewOrderPage() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Create Order</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Create Order</h1>
         <p className="text-slate-500 mt-2">Initialize a new tailoring order and automatically generate the invoice.</p>
       </div>
 
@@ -113,10 +113,10 @@ export default function NewOrderPage() {
           <CardContent className="space-y-6">
             {/* Customer Selection */}
             {selectedCustomer ? (
-              <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-center justify-between bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900/50 rounded-lg p-4">
                 <div>
-                  <p className="font-semibold text-green-900">{selectedCustomer.full_name}</p>
-                  <p className="text-sm text-green-700">{selectedCustomer.customer_code} • {selectedCustomer.contact_number}</p>
+                  <p className="font-semibold text-green-900 dark:text-green-200">{selectedCustomer.full_name}</p>
+                  <p className="text-sm text-green-700 dark:text-green-400">{selectedCustomer.customer_code} • {selectedCustomer.contact_number}</p>
                 </div>
                 <Button type="button" variant="outline" size="sm" onClick={() => setSelectedCustomer(null)}>Change Customer</Button>
               </div>
@@ -125,11 +125,11 @@ export default function NewOrderPage() {
                 <Label>Search Customer</Label>
                 <Input placeholder="Type name, phone, or code..." value={customerSearch} onChange={(e) => setCustomerSearch(e.target.value)} />
                 {customerResults.length > 0 && (
-                  <div className="border rounded-md divide-y max-h-40 overflow-y-auto bg-white shadow-sm">
+                  <div className="border rounded-md divide-y max-h-40 overflow-y-auto bg-white dark:bg-slate-900 dark:border-slate-800 dark:divide-slate-800 shadow-sm">
                     {customerResults.map((c) => (
-                      <button key={c.id} type="button" className="w-full text-left px-4 py-3 hover:bg-slate-50" onClick={() => selectCustomer(c)}>
-                        <p className="font-medium text-sm">{c.full_name}</p>
-                        <p className="text-xs text-slate-500">{c.customer_code} • {c.contact_number}</p>
+                      <button key={c.id} type="button" className="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800" onClick={() => selectCustomer(c)}>
+                        <p className="font-medium text-sm text-slate-900 dark:text-slate-100">{c.full_name}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">{c.customer_code} • {c.contact_number}</p>
                       </button>
                     ))}
                   </div>
@@ -141,8 +141,8 @@ export default function NewOrderPage() {
               <div className="space-y-2">
                 <Label>Category</Label>
                 <Select value={formData.category} onValueChange={(v) => setFormData({...formData, category: v})}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
+                  <SelectTrigger className="dark:bg-slate-900 dark:border-slate-800"><SelectValue /></SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                     <SelectItem value="Men">Men</SelectItem>
                     <SelectItem value="Ladies">Ladies</SelectItem>
                     <SelectItem value="Kids">Kids</SelectItem>
@@ -153,8 +153,8 @@ export default function NewOrderPage() {
               <div className="space-y-2">
                 <Label>Dress Type</Label>
                 <Select value={dressType} onValueChange={(val) => setDressType(val as DressType)}>
-                  <SelectTrigger><SelectValue placeholder="Select type..." /></SelectTrigger>
-                  <SelectContent>
+                  <SelectTrigger className="dark:bg-slate-900 dark:border-slate-800"><SelectValue placeholder="Select type..." /></SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                     {DRESS_TYPES.map((dt) => <SelectItem key={dt} value={dt}>{dt}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -163,13 +163,13 @@ export default function NewOrderPage() {
 
             {/* Measurement Status Alert */}
             {dressType && selectedCustomer && (
-              <div className={`p-4 rounded-md border ${latestMeasurement ? 'bg-indigo-50 border-indigo-200' : 'bg-amber-50 border-amber-200'}`}>
+              <div className={`p-4 rounded-md border ${latestMeasurement ? 'bg-indigo-50 dark:bg-indigo-950/20 border-indigo-200 dark:border-indigo-900/50' : 'bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/50'}`}>
                 <div className="flex justify-between items-center">
                   <div>
-                    <h4 className={`font-semibold ${latestMeasurement ? 'text-indigo-900' : 'text-amber-900'}`}>
+                    <h4 className={`font-semibold ${latestMeasurement ? 'text-indigo-900 dark:text-indigo-200' : 'text-amber-900 dark:text-amber-200'}`}>
                       {latestMeasurement ? 'Measurement Found' : 'No Measurement Found'}
                     </h4>
-                    <p className={`text-sm ${latestMeasurement ? 'text-indigo-700' : 'text-amber-700'} mt-1`}>
+                    <p className={`text-sm ${latestMeasurement ? 'text-indigo-700 dark:text-indigo-300' : 'text-amber-700 dark:text-amber-300'} mt-1`}>
                       {latestMeasurement 
                         ? `Latest ${dressType} measurement (${latestMeasurement.measurement_code}) will be linked and locked.` 
                         : `Please create a ${dressType} measurement for this customer before finalizing the order, or proceed without one.`}
@@ -203,8 +203,8 @@ export default function NewOrderPage() {
               <div className="space-y-2">
                 <Label>Fabric Source</Label>
                 <Select value={formData.fabric_source} onValueChange={(v) => setFormData({...formData, fabric_source: v})}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
+                  <SelectTrigger className="dark:bg-slate-900 dark:border-slate-800"><SelectValue /></SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                     <SelectItem value="Store">Store Provided</SelectItem>
                     <SelectItem value="Customer Provided">Customer Provided</SelectItem>
                   </SelectContent>

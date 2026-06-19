@@ -217,7 +217,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
       {/* Breadcrumb Navigation */}
       <div className="flex items-center justify-between">
         <Link href="/dashboard/orders">
-          <Button variant="ghost" size="sm" className="gap-2 text-slate-500 hover:text-slate-900 group font-bold">
+          <Button variant="ghost" size="sm" className="gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white group font-bold">
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> Back to Orders
           </Button>
         </Link>
@@ -379,9 +379,9 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                 
                 <div className="space-y-3 text-center sm:text-left flex-1">
                   <div>
-                    <h4 className="font-black text-slate-900 text-xl tracking-tight">{customer.full_name}</h4>
+                    <h4 className="font-black text-slate-900 dark:text-white text-xl tracking-tight">{customer.full_name}</h4>
                     <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2 mt-1">
-                      <span className="text-[10px] font-bold font-mono text-slate-400 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                      <span className="text-[10px] font-bold font-mono text-slate-400 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">
                         {customer.customer_code}
                       </span>
                       <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border ${
@@ -394,18 +394,18 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600 pt-3 border-t border-slate-100/60">
-                    <a href={`tel:${customer.contact_number}`} className="flex items-center justify-center sm:justify-start gap-1.5 hover:text-indigo-600 transition-colors font-semibold group/contact">
-                      <Phone className="w-3.5 h-3.5 text-slate-400 group-hover/contact:text-indigo-500" /> Phone: <span className="font-bold text-slate-800 underline">{customer.contact_number}</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600 dark:text-slate-400 pt-3 border-t border-slate-100/60 dark:border-slate-800">
+                    <a href={`tel:${customer.contact_number}`} className="flex items-center justify-center sm:justify-start gap-1.5 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-semibold group/contact">
+                      <Phone className="w-3.5 h-3.5 text-slate-400 group-hover/contact:text-indigo-500" /> Phone: <span className="font-bold text-slate-800 dark:text-slate-200 underline">{customer.contact_number}</span>
                     </a>
                     {customer.email && (
-                      <a href={`mailto:${customer.email}`} className="flex items-center justify-center sm:justify-start gap-1.5 hover:text-indigo-600 transition-colors font-semibold group/contact">
-                        <Mail className="w-3.5 h-3.5 text-slate-400 group-hover/contact:text-indigo-500" /> Email: <span className="font-bold text-slate-800 underline truncate">{customer.email}</span>
+                      <a href={`mailto:${customer.email}`} className="flex items-center justify-center sm:justify-start gap-1.5 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-semibold group/contact">
+                        <Mail className="w-3.5 h-3.5 text-slate-400 group-hover/contact:text-indigo-500" /> Email: <span className="font-bold text-slate-800 dark:text-slate-200 underline truncate">{customer.email}</span>
                       </a>
                     )}
                     {customer.student_admission_no && (
-                      <div className="col-span-1 sm:col-span-2 flex items-center justify-center sm:justify-start gap-1.5 text-slate-500">
-                        🎓 Student ID: <span className="font-bold text-slate-800">{customer.student_admission_no}</span>
+                      <div className="col-span-1 sm:col-span-2 flex items-center justify-center sm:justify-start gap-1.5 text-slate-500 dark:text-slate-400">
+                        🎓 Student ID: <span className="font-bold text-slate-800 dark:text-slate-200">{customer.student_admission_no}</span>
                       </div>
                     )}
                   </div>
@@ -482,15 +482,15 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col justify-between">
+                  <div className="bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-100 dark:border-slate-800 flex flex-col justify-between">
                     <span className="text-slate-400 text-[10px] font-black uppercase block tracking-wider">Quantity to Stitch</span>
-                    <p className="font-extrabold text-slate-800 text-lg mt-1">{order.quantity} pieces</p>
+                    <p className="font-extrabold text-slate-800 dark:text-slate-200 text-lg mt-1">{order.quantity} pieces</p>
                   </div>
                   
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col justify-between">
+                  <div className="bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-100 dark:border-slate-800 flex flex-col justify-between">
                     <span className="text-slate-400 text-[10px] font-black uppercase block tracking-wider">Delivery Proximity</span>
                     <div className="flex items-center justify-between gap-3 mt-1.5">
-                      <p className="font-bold text-slate-800 text-base">
+                      <p className="font-bold text-slate-800 dark:text-slate-200 text-base">
                         {order.delivery_date ? new Date(order.delivery_date).toLocaleDateString() : '—'}
                       </p>
                       {deliveryProximity && (
@@ -503,7 +503,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
 
                   <div className="p-1">
                     <span className="text-slate-400 text-[10px] font-black uppercase block tracking-wider">Fabric Source</span>
-                    <p className="font-bold text-slate-700 mt-1 flex items-center gap-1.5">
+                    <p className="font-bold text-slate-700 dark:text-slate-300 mt-1 flex items-center gap-1.5">
                       <span className={`w-2 h-2 rounded-full ${order.fabric_source === 'Store' ? 'bg-indigo-500' : 'bg-amber-500'}`} />
                       {order.fabric_source || '—'}
                     </p>
@@ -511,19 +511,19 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
 
                   <div className="p-1">
                     <span className="text-slate-400 text-[10px] font-black uppercase block tracking-wider">Fabric Description</span>
-                    <p className="font-bold text-slate-700 mt-1">{order.fabric_details || '—'}</p>
+                    <p className="font-bold text-slate-700 dark:text-slate-300 mt-1">{order.fabric_details || '—'}</p>
                   </div>
 
-                  <div className="col-span-1 sm:col-span-2 border-t border-slate-100 pt-4">
+                  <div className="col-span-1 sm:col-span-2 border-t border-slate-100 dark:border-slate-800 pt-4">
                     <span className="text-slate-400 text-[10px] font-black uppercase block tracking-wider">Special Tailoring Remarks</span>
-                    <p className="text-slate-700 font-semibold mt-1.5 leading-relaxed bg-slate-50/50 p-3.5 rounded-xl border border-slate-100/60 whitespace-pre-wrap">
+                    <p className="text-slate-700 dark:text-slate-300 font-semibold mt-1.5 leading-relaxed bg-slate-50/50 dark:bg-slate-900/20 p-3.5 rounded-xl border border-slate-100/60 dark:border-slate-800 whitespace-pre-wrap">
                       {order.special_remarks || 'No special remarks provided.'}
                     </p>
                   </div>
 
-                  <div className="col-span-1 sm:col-span-2 border-t border-slate-100 pt-4">
+                  <div className="col-span-1 sm:col-span-2 border-t border-slate-100 dark:border-slate-800 pt-4">
                     <span className="text-slate-400 text-[10px] font-black uppercase block tracking-wider">Internal Staff Notes</span>
-                    <p className="text-slate-600 font-semibold mt-1.5 leading-relaxed bg-indigo-50/20 p-3.5 rounded-xl border border-indigo-100/30">
+                    <p className="text-slate-600 dark:text-slate-400 font-semibold mt-1.5 leading-relaxed bg-indigo-50/20 dark:bg-indigo-950/20 p-3.5 rounded-xl border border-indigo-100/30 dark:border-indigo-950/35">
                       {order.internal_notes || 'No internal notes recorded.'}
                     </p>
                   </div>
@@ -583,16 +583,16 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
           
           {/* Financial Invoice Card */}
           {invoice && (
-            <Card className="border-indigo-100 hover:shadow-lg transition-all duration-300 overflow-hidden shadow-md rounded-2xl bg-white">
-              <div className="bg-gradient-to-br from-indigo-50/50 to-indigo-100/30 px-6 py-5 border-b border-indigo-100/80 flex justify-between items-start">
+            <Card className="border-indigo-100 dark:border-slate-800 hover:shadow-lg transition-all duration-300 overflow-hidden shadow-md rounded-2xl bg-white dark:bg-card">
+              <div className="bg-gradient-to-br from-indigo-50/50 to-indigo-100/30 dark:from-indigo-950/20 dark:to-indigo-900/10 px-6 py-5 border-b border-indigo-100/80 dark:border-slate-800 flex justify-between items-start">
                 <div className="space-y-0.5">
-                  <CardTitle className="text-indigo-950 font-black text-lg">Billing & Invoice</CardTitle>
-                  <CardDescription className="text-indigo-600 font-bold font-mono text-xs">{invoice.invoice_number}</CardDescription>
+                  <CardTitle className="text-indigo-950 dark:text-indigo-100 font-black text-lg">Billing & Invoice</CardTitle>
+                  <CardDescription className="text-indigo-600 dark:text-indigo-400 font-bold font-mono text-xs">{invoice.invoice_number}</CardDescription>
                 </div>
                 <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black tracking-wide border uppercase
-                  ${invoice.payment_status === 'Fully Paid' ? 'bg-green-50 text-green-700 border-green-200' : 
-                    invoice.payment_status === 'Partially Paid' ? 'bg-amber-50 text-amber-700 border-amber-200' : 
-                    'bg-red-50 text-red-700 border-red-200'}`}>
+                  ${invoice.payment_status === 'Fully Paid' ? 'bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-300 border-green-200 dark:border-green-900/50' : 
+                    invoice.payment_status === 'Partially Paid' ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-900/50' : 
+                    'bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border-red-200 dark:border-red-900/50'}`}>
                   {invoice.payment_status}
                 </span>
               </div>
@@ -601,10 +601,10 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                 {/* Visual Payment Progress Bar */}
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-500 font-bold">Collected Coverage</span>
-                    <span className="font-black text-indigo-700">{Math.round(percentPaid)}%</span>
+                    <span className="text-slate-500 dark:text-slate-400 font-bold">Collected Coverage</span>
+                    <span className="font-black text-indigo-700 dark:text-indigo-400">{Math.round(percentPaid)}%</span>
                   </div>
-                  <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200/50 shadow-inner">
+                  <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-800 shadow-inner">
                     <div 
                       className={`h-full rounded-full transition-all duration-500 shadow-xs ${
                         percentPaid >= 100 ? 'bg-emerald-500' : 'bg-gradient-to-r from-blue-500 to-indigo-600'
@@ -615,16 +615,16 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                 </div>
 
                 <div className="space-y-2.5 text-sm pt-2">
-                  <div className="flex justify-between py-1 text-slate-600 font-semibold">
+                  <div className="flex justify-between py-1 text-slate-600 dark:text-slate-400 font-semibold">
                     <span>Total Billed</span>
-                    <span className="font-extrabold text-slate-900">LKR {invoice.total_amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                    <span className="font-extrabold text-slate-900 dark:text-white">LKR {invoice.total_amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
                   </div>
-                  <div className="flex justify-between py-1 border-t border-slate-100/60 pt-2.5 text-slate-600 font-semibold">
+                  <div className="flex justify-between py-1 border-t border-slate-100/60 dark:border-slate-800 pt-2.5 text-slate-600 dark:text-slate-400 font-semibold">
                     <span>Paid Amount</span>
                     <span className="font-bold text-green-600">LKR {invoice.paid_amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
                   </div>
-                  <div className="border-t border-indigo-100 pt-3.5 flex justify-between items-center">
-                    <span className="font-black text-slate-800 text-sm">Remaining Due</span>
+                  <div className="border-t border-indigo-100 dark:border-slate-850 pt-3.5 flex justify-between items-center">
+                    <span className="font-black text-slate-800 dark:text-slate-200 text-sm">Remaining Due</span>
                     <span className={`font-black text-xl ${invoice.balance_amount > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
                       LKR {invoice.balance_amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
                     </span>
@@ -634,7 +634,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                 <Button 
                   onClick={() => setShowInvoiceModal(true)} 
                   variant="outline" 
-                  className="w-full mt-2 gap-2 border-indigo-200 text-indigo-800 hover:bg-indigo-50 font-bold text-xs shadow-xs h-9"
+                  className="w-full mt-2 gap-2 border-indigo-200 dark:border-slate-800 text-indigo-800 dark:text-indigo-200 hover:bg-indigo-50 dark:hover:bg-indigo-950 font-bold text-xs shadow-xs h-9"
                 >
                   <Printer className="w-4 h-4" /> View & Print Receipt
                 </Button>
@@ -644,16 +644,16 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
  
           {/* Payment Collect Terminal */}
           {invoice && invoice.balance_amount > 0 && hasEditPermission(user, '/dashboard/invoices') && (
-            <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 rounded-2xl bg-white">
-              <CardHeader className="pb-3 border-b border-slate-100 bg-slate-50/30">
-                <CardTitle className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+            <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-card">
+              <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/10">
+                <CardTitle className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
                   <Coins className="w-4 h-4 text-indigo-500" /> Collect Payment Terminal
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
                 <form onSubmit={handlePaymentSubmit} className="space-y-4">
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-slate-500 uppercase">Payment Amount (LKR)</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Payment Amount (LKR)</Label>
                     <Input 
                       type="number" 
                       step="0.01" 
@@ -662,17 +662,17 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                       value={paymentAmount} 
                       onChange={(e) => setPaymentAmount(e.target.value)} 
                       placeholder={`Max: ${invoice.balance_amount.toLocaleString()}`}
-                      className="font-bold text-slate-850 text-base border-slate-200 focus:border-indigo-500 focus:ring-2 shadow-xs"
+                      className="font-bold text-slate-850 dark:text-white text-base border-slate-200 dark:border-slate-800 focus:border-indigo-500 focus:ring-2 shadow-xs bg-white dark:bg-slate-900"
                     />
                   </div>
                   
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-bold text-slate-500 uppercase">Payment Method</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Payment Method</Label>
                     <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                      <SelectTrigger className="font-semibold bg-white text-slate-800 border-slate-200 shadow-xs">
+                      <SelectTrigger className="font-semibold bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 shadow-xs">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                         <SelectItem value="Cash">💵 Cash</SelectItem>
                         <SelectItem value="Card">💳 Card</SelectItem>
                         <SelectItem value="Bank Transfer">🏛️ Bank Transfer</SelectItem>
@@ -684,7 +684,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-slate-950 text-white hover:bg-slate-900 font-bold shadow-md hover:shadow-lg transition-all" 
+                    className="w-full bg-slate-950 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-900 dark:hover:bg-slate-100 font-bold shadow-md hover:shadow-lg transition-all" 
                     disabled={submittingPayment || !paymentAmount}
                   >
                     {submittingPayment ? 'Processing Cash...' : 'Confirm & Collect Cash'}
@@ -696,20 +696,20 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
  
           {/* Historical Payments Ledger list */}
           {payments.length > 0 && (
-            <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 rounded-2xl bg-white">
-              <CardHeader className="pb-3 border-b border-slate-100 bg-slate-50/30">
-                <CardTitle className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+            <Card className="hover:shadow-lg transition-all duration-300 border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-card">
+              <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/10">
+                <CardTitle className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
                   <Wallet className="w-4 h-4 text-indigo-500" /> Receipt Ledger
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
                 <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
                   {payments.map(pay => (
-                    <div key={pay.id} className="flex justify-between items-center text-xs p-3.5 bg-slate-50 rounded-xl border border-slate-100 hover:bg-slate-100/30 transition-colors shadow-xs">
+                    <div key={pay.id} className="flex justify-between items-center text-xs p-3.5 bg-slate-50 dark:bg-slate-900/35 rounded-xl border border-slate-100 dark:border-slate-800 hover:bg-slate-100/30 dark:hover:bg-slate-900/50 transition-colors shadow-xs">
                       <div>
-                        <p className="font-black text-slate-900 text-sm">LKR {pay.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
-                        <p className="text-[10px] text-slate-400 font-semibold mt-1">
-                          {new Date(pay.created_at).toLocaleDateString()} • <span className="text-indigo-600 font-bold">{pay.method}</span>
+                        <p className="font-black text-slate-900 dark:text-white text-sm">LKR {pay.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                        <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-1">
+                          {new Date(pay.created_at).toLocaleDateString()} • <span className="text-indigo-600 dark:text-indigo-400 font-bold">{pay.method}</span>
                           {pay.cashier_name && ` • Staff: ${pay.cashier_name}`}
                         </p>
                       </div>
@@ -728,7 +728,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
       {/* Invoice Detail popup Modal */}
       {showInvoiceModal && invoice && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden border border-slate-200 animate-in zoom-in-95 duration-200">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
             <div className="bg-slate-950 text-white px-6 py-4.5 flex justify-between items-center no-print border-b border-slate-800">
               <h3 className="font-extrabold text-base tracking-tight">Billing Details & Print Copy</h3>
               <button onClick={() => setShowInvoiceModal(false)} className="text-slate-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 p-1.5 rounded-lg">

@@ -55,10 +55,10 @@ export default function CustomersPage() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'Men': return 'bg-blue-100 text-blue-800';
-      case 'Ladies': return 'bg-pink-100 text-pink-800';
-      case 'Kids': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-slate-100 text-slate-800';
+      case 'Men': return 'bg-blue-100 dark:bg-blue-950/35 text-blue-800 dark:text-blue-300';
+      case 'Ladies': return 'bg-pink-100 dark:bg-pink-950/35 text-pink-800 dark:text-pink-300';
+      case 'Kids': return 'bg-purple-100 dark:bg-purple-950/35 text-purple-800 dark:text-purple-300';
+      default: return 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300';
     }
   };
   const filteredCustomers = customers.filter(cust => {
@@ -70,12 +70,12 @@ export default function CustomersPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Customer Directory</h1>
-          <p className="text-slate-500 text-sm mt-1">{filteredCustomers.length} of {customers.length} profiles shown</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Customer Directory</h1>
+          <p className="text-slate-500 mt-1">{filteredCustomers.length} of {customers.length} profiles shown</p>
         </div>
         {hasEditPermission(user, '/dashboard/customers') && (
           <Link href="/dashboard/orders/unified">
-            <Button className="bg-slate-900 text-white hover:bg-slate-800 shadow-md gap-2">
+            <Button className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 shadow-md gap-2 font-bold">
               <UserPlus className="w-4 h-4" /> New Walk-in Order
             </Button>
           </Link>
@@ -83,7 +83,7 @@ export default function CustomersPage() {
       </div>
       
       <Card>
-        <CardHeader className="pb-3">
+        <CardHeader className="pb-3 border-b dark:border-slate-800">
           <div className="flex flex-col sm:flex-row gap-3 w-full">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -95,10 +95,10 @@ export default function CustomersPage() {
               />
             </div>
             <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-              <SelectTrigger className="w-52 h-10 text-sm bg-white text-slate-800 border-slate-200">
+              <SelectTrigger className="w-52 h-10 text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                 <SelectValue placeholder="All Months" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                 <SelectItem value="all">All Months</SelectItem>
                 {months.map(m => (
                   <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
@@ -110,7 +110,7 @@ export default function CustomersPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="bg-slate-50 text-slate-600 font-semibold text-xs uppercase tracking-wide border-b">
+              <thead className="bg-slate-50 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 font-semibold text-xs uppercase tracking-wide border-b dark:border-slate-800">
                 <tr>
                   <th className="px-5 py-3">Customer Code</th>
                   <th className="px-5 py-3">Full Name</th>
@@ -120,7 +120,7 @@ export default function CustomersPage() {
                   <th className="px-5 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {loading ? (
                   <tr>
                     <td colSpan={6} className="text-center py-10 text-slate-400">
@@ -138,19 +138,19 @@ export default function CustomersPage() {
                   </tr>
                 ) : (
                   filteredCustomers.map((cust) => (
-                    <tr key={cust.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="px-5 py-3.5 font-mono font-medium text-slate-700 text-xs">{cust.customer_code}</td>
-                      <td className="px-5 py-3.5 font-semibold text-slate-900">{cust.full_name}</td>
-                      <td className="px-5 py-3.5 text-slate-600">{cust.contact_number}</td>
+                    <tr key={cust.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors">
+                      <td className="px-5 py-3.5 font-mono font-medium text-slate-700 dark:text-slate-300 text-xs">{cust.customer_code}</td>
+                      <td className="px-5 py-3.5 font-semibold text-slate-900 dark:text-slate-100">{cust.full_name}</td>
+                      <td className="px-5 py-3.5 text-slate-600 dark:text-slate-300">{cust.contact_number}</td>
                       <td className="px-5 py-3.5">
                         <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getCategoryColor(cust.gender_category)}`}>
                           {cust.gender_category}
                         </span>
                       </td>
-                      <td className="px-5 py-3.5 text-slate-500 text-xs">{cust.student_admission_no || '—'}</td>
+                      <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 text-xs">{cust.student_admission_no || '—'}</td>
                       <td className="px-5 py-3.5 text-right">
                         <Link href={`/dashboard/customers/${cust.id}`}>
-                          <Button variant="ghost" size="sm" className="gap-1 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50">
+                          <Button variant="ghost" size="sm" className="gap-1 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/30">
                             <Eye className="w-3.5 h-3.5" /> View Profile
                           </Button>
                         </Link>

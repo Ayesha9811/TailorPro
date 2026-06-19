@@ -116,12 +116,12 @@ function OrdersPageContent() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Orders</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Orders</h1>
           <p className="text-slate-500 text-sm mt-1">{filteredOrders.length} of {orders.length} orders shown</p>
         </div>
         {user?.role_name !== 'Cashier' && (
           <Link href="/dashboard/orders/unified">
-            <Button className="bg-slate-900 text-white hover:bg-slate-800 shadow-md gap-2">
+            <Button className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 shadow-md gap-2 font-bold">
               <Plus className="w-4 h-4" /> New Walk-in Order
             </Button>
           </Link>
@@ -129,7 +129,7 @@ function OrdersPageContent() {
       </div>
 
       <Card>
-        <CardHeader className="pb-3 border-b">
+        <CardHeader className="pb-3 border-b dark:border-slate-800">
           <div className="flex flex-col md:flex-row gap-3 w-full">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -142,10 +142,10 @@ function OrdersPageContent() {
             </div>
             <div className="flex flex-wrap gap-2">
               <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                <SelectTrigger className="w-40 h-9 text-sm bg-white text-slate-800 border-slate-200">
+                <SelectTrigger className="w-40 h-9 text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                   <SelectValue placeholder="All Months" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                   <SelectItem value="all">All Months</SelectItem>
                   {months.map(m => (
                     <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
@@ -154,10 +154,10 @@ function OrdersPageContent() {
               </Select>
 
               <Select value={garmentFilter} onValueChange={setGarmentFilter}>
-                <SelectTrigger className="w-40 h-9 text-sm bg-white text-slate-800 border-slate-200">
+                <SelectTrigger className="w-40 h-9 text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                   <SelectValue placeholder="All Garments" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                   <SelectItem value="all">All Garments</SelectItem>
                   {uniqueGarmentTypes.map(g => (
                     <SelectItem key={g} value={g}>{g}</SelectItem>
@@ -166,10 +166,10 @@ function OrdersPageContent() {
               </Select>
 
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-40 h-9 text-sm bg-white text-slate-800 border-slate-200">
+                <SelectTrigger className="w-40 h-9 text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                   <SelectValue placeholder="All Statuses" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                   <SelectItem value="all">All Statuses</SelectItem>
                   <SelectItem value="pending">Pending</SelectItem>
                   <SelectItem value="delayed">Delayed</SelectItem>
@@ -187,7 +187,7 @@ function OrdersPageContent() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide border-b">
+              <thead className="bg-slate-50 dark:bg-slate-900/60 text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide border-b dark:border-slate-800">
                 <tr>
                   <th className="px-5 py-3">Order No.</th>
                   <th className="px-5 py-3">Customer</th>
@@ -197,7 +197,7 @@ function OrdersPageContent() {
                   <th className="px-5 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {loading ? (
                   <tr>
                     <td colSpan={6} className="text-center py-10 text-slate-400">
@@ -215,11 +215,11 @@ function OrdersPageContent() {
                   filteredOrders.map((order) => {
                     const cust = customers[order.customer_id];
                     return (
-                      <tr key={order.id} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="px-5 py-3.5 font-mono font-semibold text-slate-800 text-xs">{order.order_number}</td>
+                      <tr key={order.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors">
+                        <td className="px-5 py-3.5 font-mono font-semibold text-slate-800 dark:text-slate-200 text-xs">{order.order_number}</td>
                         <td className="px-5 py-3.5">
                           {cust ? (
-                            <Link href={`/dashboard/customers/${cust.id}`} className="hover:underline text-indigo-600 font-medium">
+                            <Link href={`/dashboard/customers/${cust.id}`} className="hover:underline text-indigo-600 dark:text-indigo-400 font-medium">
                               {cust.full_name}
                             </Link>
                           ) : (

@@ -115,15 +115,15 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-3">
           <Link href="/dashboard/customers">
-            <Button variant="outline" size="sm" className="h-9 w-9 p-0 rounded-xl hover:bg-slate-100 transition-all">
-              <ArrowLeft className="w-4 h-4 text-slate-600" />
+            <Button variant="outline" size="sm" className="h-9 w-9 p-0 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+              <ArrowLeft className="w-4 h-4 text-slate-600 dark:text-slate-300" />
             </Button>
           </Link>
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
               <span>Directory</span>
               <span>/</span>
-              <span className="text-slate-600">Customer Details</span>
+              <span className="text-slate-600 dark:text-slate-300">Customer Details</span>
             </div>
           </div>
         </div>
@@ -213,19 +213,19 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             <CardContent className="p-6 space-y-4">
               
               {/* Contact phone numbers */}
-              <div className="group relative flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
+              <div className="group relative flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-850">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="p-2 bg-slate-100 text-slate-500 rounded-lg shrink-0">
+                  <div className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg shrink-0">
                     <Phone className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Primary Contact</p>
-                    <p className="text-sm font-semibold text-slate-800 truncate">{customer.contact_number}</p>
+                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">{customer.contact_number}</p>
                   </div>
                 </div>
                 <button 
                   onClick={() => handleCopy(customer.contact_number, 'phone')}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-slate-700 bg-white border rounded-lg shadow-2xs"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-lg shadow-2xs"
                   title="Copy Contact Number"
                 >
                   {copiedField === 'phone' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -234,19 +234,19 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
 
               {/* Alternate contact */}
               {customer.alternate_contact && (
-                <div className="group relative flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
+                <div className="group relative flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-850">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="p-2 bg-slate-100 text-slate-500 rounded-lg shrink-0">
+                    <div className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg shrink-0">
                       <Phone className="w-4 h-4 text-slate-400" />
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Alternate Contact</p>
-                      <p className="text-sm font-medium text-slate-700 truncate">{customer.alternate_contact}</p>
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">{customer.alternate_contact}</p>
                     </div>
                   </div>
                   <button 
                     onClick={() => handleCopy(customer.alternate_contact, 'alt_phone')}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-slate-700 bg-white border rounded-lg shadow-2xs"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-lg shadow-2xs"
                     title="Copy Alternate Contact"
                   >
                     {copiedField === 'alt_phone' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -256,19 +256,19 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
 
               {/* Email */}
               {customer.email && (
-                <div className="group relative flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
+                <div className="group relative flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-850">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="p-2 bg-slate-100 text-slate-500 rounded-lg shrink-0">
+                    <div className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg shrink-0">
                       <Mail className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Email Address</p>
-                      <p className="text-sm font-medium text-slate-700 truncate">{customer.email}</p>
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">{customer.email}</p>
                     </div>
                   </div>
                   <button 
                     onClick={() => handleCopy(customer.email, 'email')}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-slate-700 bg-white border rounded-lg shadow-2xs"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-lg shadow-2xs"
                     title="Copy Email"
                   >
                     {copiedField === 'email' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -278,25 +278,25 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
 
               {/* Home Address */}
               {customer.address && (
-                <div className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
-                  <div className="p-2 bg-slate-100 text-slate-500 rounded-lg shrink-0 mt-0.5">
+                <div className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-850">
+                  <div className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg shrink-0 mt-0.5">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
                     <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Billing/Delivery Address</p>
-                    <p className="text-sm font-medium text-slate-700 mt-0.5 leading-relaxed">{customer.address}</p>
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mt-0.5 leading-relaxed">{customer.address}</p>
                   </div>
                 </div>
               )}
 
               {/* Student Details Badge */}
               {customer.student_admission_no && (
-                <div className="flex items-center gap-3 p-2.5 rounded-xl bg-violet-500/5 border border-violet-500/10 text-violet-700">
+                <div className="flex items-center gap-3 p-2.5 rounded-xl bg-violet-500/5 dark:bg-violet-500/10 border border-violet-500/10 dark:border-violet-500/20 text-violet-700 dark:text-violet-400">
                   <div className="p-2 bg-violet-500/10 rounded-lg shrink-0">
-                    <GraduationCap className="w-4 h-4 text-violet-600" />
+                    <GraduationCap className="w-4 h-4 text-violet-600 dark:text-violet-400" />
                   </div>
                   <div>
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-violet-500">Linked Student Account</p>
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-violet-500 dark:text-violet-400">Linked Student Account</p>
                     <p className="text-xs font-bold mt-0.5">Admission No: <span className="font-mono">{customer.student_admission_no}</span></p>
                   </div>
                 </div>
@@ -304,25 +304,25 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
 
               {/* Birthday Details */}
               {customer.birthday && (
-                <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
-                  <div className="p-2 bg-slate-100 text-slate-500 rounded-lg shrink-0">
+                <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-850">
+                  <div className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg shrink-0">
                     <Calendar className="w-4 h-4" />
                   </div>
                   <div>
                     <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Date of Birth / Anniversary</p>
-                    <p className="text-sm font-medium text-slate-700 mt-0.5">{new Date(customer.birthday).toLocaleDateString(undefined, { dateStyle: 'medium' })}</p>
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mt-0.5">{new Date(customer.birthday).toLocaleDateString(undefined, { dateStyle: 'medium' })}</p>
                   </div>
                 </div>
               )}
 
               {/* Notes */}
               {customer.notes && (
-                <div className="bg-amber-500/5 border border-amber-500/10 rounded-xl p-4 text-xs text-amber-800 space-y-1 mt-2">
-                  <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[10px] text-amber-700">
+                <div className="bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/10 dark:border-amber-500/20 rounded-xl p-4 text-xs text-amber-800 dark:text-amber-400 space-y-1 mt-2">
+                  <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[10px] text-amber-700 dark:text-amber-500">
                     <Info className="w-3.5 h-3.5" />
                     <span>Special Instructions & Notes</span>
                   </div>
-                  <p className="leading-relaxed text-amber-900 font-medium">{customer.notes}</p>
+                  <p className="leading-relaxed text-amber-900 dark:text-amber-300 font-medium">{customer.notes}</p>
                 </div>
               )}
             </CardContent>
@@ -333,13 +333,13 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
         <div className="lg:col-span-8 space-y-6">
           
           {/* Custom animated dashboard tab menu */}
-          <div className="bg-slate-100/80 p-1.5 rounded-xl border border-slate-200/60 flex gap-2">
+          <div className="bg-slate-100/80 dark:bg-slate-800/80 p-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 flex gap-2">
             <button
               onClick={() => setActiveTab('overview')}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wide transition-all duration-200 ${
                 activeTab === 'overview'
-                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/40'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm border border-slate-200/40 dark:border-slate-800'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
@@ -349,8 +349,8 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
               onClick={() => setActiveTab('orders')}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wide transition-all duration-200 ${
                 activeTab === 'orders'
-                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/40'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm border border-slate-200/40 dark:border-slate-800'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
               }`}
             >
               <ShoppingBag className="w-3.5 h-3.5" />
@@ -360,8 +360,8 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
               onClick={() => setActiveTab('measurements')}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wide transition-all duration-200 ${
                 activeTab === 'measurements'
-                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/40'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm border border-slate-200/40 dark:border-slate-800'
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
               }`}
             >
               <Ruler className="w-3.5 h-3.5" />
@@ -376,49 +376,49 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
               {/* Stat Card Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 
-                <Card className="border border-indigo-500/10 shadow-xs relative overflow-hidden bg-card">
+                <Card className="border border-indigo-500/10 dark:border-indigo-500/20 shadow-xs relative overflow-hidden bg-card">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-500/5 rounded-full blur-xl -mr-4 -mt-4"></div>
                   <CardContent className="p-5 flex items-center justify-between">
                     <div>
                       <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">Garments Ordered</p>
-                      <h3 className="text-3xl font-extrabold text-slate-800 mt-1">{orders.length}</h3>
-                      <p className="text-[10px] text-slate-400 mt-1 font-medium">Life-time custom order count</p>
+                      <h3 className="text-3xl font-extrabold text-slate-800 dark:text-slate-100 mt-1">{orders.length}</h3>
+                      <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 font-medium">Life-time custom order count</p>
                     </div>
-                    <div className="p-3 bg-indigo-500/10 rounded-xl text-indigo-600 shrink-0">
+                    <div className="p-3 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-xl text-indigo-600 dark:text-indigo-400 shrink-0">
                       <ShoppingBag className="w-6 h-6" />
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border border-emerald-500/10 shadow-xs relative overflow-hidden bg-card">
+                <Card className="border border-emerald-500/10 dark:border-emerald-500/20 shadow-xs relative overflow-hidden bg-card">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/5 rounded-full blur-xl -mr-4 -mt-4"></div>
                   <CardContent className="p-5 flex items-center justify-between">
                     <div>
                       <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Recorded Templates</p>
-                      <h3 className="text-3xl font-extrabold text-slate-800 mt-1">{measurements.length}</h3>
-                      <p className="text-[10px] text-slate-400 mt-1 font-medium">Unique measurement specs</p>
+                      <h3 className="text-3xl font-extrabold text-slate-800 dark:text-slate-100 mt-1">{measurements.length}</h3>
+                      <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 font-medium">Unique measurement specs</p>
                     </div>
-                    <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-600 shrink-0">
+                    <div className="p-3 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-xl text-emerald-600 dark:text-emerald-400 shrink-0">
                       <Ruler className="w-6 h-6" />
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border border-violet-500/10 shadow-xs relative overflow-hidden bg-card">
+                <Card className="border border-violet-500/10 dark:border-violet-500/20 shadow-xs relative overflow-hidden bg-card">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-violet-500/5 rounded-full blur-xl -mr-4 -mt-4"></div>
                   <CardContent className="p-5 flex items-center justify-between">
                     <div>
                       <p className="text-[10px] font-bold text-violet-500 uppercase tracking-wider">Latest Activity</p>
-                      <h3 className="text-lg font-bold text-slate-700 mt-2 truncate">
+                      <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mt-2 truncate">
                         {orders.length > 0 ? orders[0].status : 'No orders yet'}
                       </h3>
-                      <p className="text-[10px] text-slate-400 mt-1 font-medium">
+                      <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 font-medium">
                         {orders.length > 0 && orders[0].delivery_date 
                           ? `Delivery: ${new Date(orders[0].delivery_date).toLocaleDateString()}`
                           : 'Awaiting first order detail'}
                       </p>
                     </div>
-                    <div className="p-3 bg-violet-500/10 rounded-xl text-violet-600 shrink-0">
+                    <div className="p-3 bg-violet-500/10 dark:bg-violet-500/20 rounded-xl text-violet-600 dark:text-violet-400 shrink-0">
                       <Clock className="w-6 h-6" />
                     </div>
                   </CardContent>
@@ -426,40 +426,40 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
               </div>
 
               {/* Quick Actions Panel */}
-              <Card className="border border-border/80 shadow-xs">
-                <CardHeader className="pb-3 border-b border-border/60 bg-slate-50/50">
-                  <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-2">
+              <Card className="border border-border/80 dark:border-slate-850 shadow-xs">
+                <CardHeader className="pb-3 border-b border-border/60 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
+                  <CardTitle className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-primary" /> Profile Quick Utilities
                   </CardTitle>
                   <CardDescription className="text-xs">Shorcuts and diagnostics for this customer.</CardDescription>
                 </CardHeader>
                 <CardContent className="p-6 space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/30 flex items-start gap-3 hover:bg-slate-50 transition-colors">
-                      <div className="p-2 bg-indigo-500/15 rounded-lg text-indigo-600 mt-0.5">
+                    <div className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/20 flex items-start gap-3 hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors">
+                      <div className="p-2 bg-indigo-500/15 rounded-lg text-indigo-600 dark:text-indigo-400 mt-0.5">
                         <ShoppingBag className="w-4 h-4" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-slate-800">Generate New Bill</h4>
-                        <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Instantly open the order form pre-filled with this customer profile.</p>
+                        <h4 className="text-xs font-bold text-slate-800 dark:text-slate-250">Generate New Bill</h4>
+                        <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 leading-relaxed">Instantly open the order form pre-filled with this customer profile.</p>
                         {user?.role_name !== 'Cashier' && (
-                          <Link href={`/dashboard/orders/unified?customer_id=${id}`} className="inline-flex items-center gap-1 text-[11px] text-indigo-600 hover:text-indigo-800 font-bold mt-2 hover:underline">
+                          <Link href={`/dashboard/orders/unified?customer_id=${id}`} className="inline-flex items-center gap-1 text-[11px] text-indigo-600 dark:text-indigo-450 hover:text-indigo-800 dark:hover:text-indigo-300 font-bold mt-2 hover:underline">
                             Launch Unified Order Form →
                           </Link>
                         )}
                       </div>
                     </div>
 
-                    <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/30 flex items-start gap-3 hover:bg-slate-50 transition-colors">
-                      <div className="p-2 bg-emerald-500/15 rounded-lg text-emerald-600 mt-0.5">
+                    <div className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/20 flex items-start gap-3 hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors">
+                      <div className="p-2 bg-emerald-500/15 rounded-lg text-emerald-600 dark:text-emerald-400 mt-0.5">
                         <Ruler className="w-4 h-4" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-slate-800">Review Fit Records</h4>
-                        <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">Check previous measurements or link a dress size category parameters.</p>
+                        <h4 className="text-xs font-bold text-slate-800 dark:text-slate-250">Review Fit Records</h4>
+                        <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 leading-relaxed">Check previous measurements or link a dress size category parameters.</p>
                         <button 
                           onClick={() => setActiveTab('measurements')}
-                          className="inline-flex items-center gap-1 text-[11px] text-emerald-600 hover:text-emerald-800 font-bold mt-2 hover:underline"
+                          className="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-450 hover:text-emerald-800 dark:hover:text-emerald-300 font-bold mt-2 hover:underline"
                         >
                           View Measurement Templates →
                         </button>
@@ -467,12 +467,12 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                     </div>
                   </div>
 
-                  <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between text-xs mt-2 text-slate-500">
+                  <div className="p-3 bg-slate-50 dark:bg-slate-900/20 border border-slate-100 dark:border-slate-800 rounded-xl flex items-center justify-between text-xs mt-2 text-slate-500 dark:text-slate-400">
                     <span className="font-semibold flex items-center gap-1.5">
                       <Info className="w-4 h-4 text-slate-400" />
                       Registered in Directory since:
                     </span>
-                    <span className="font-semibold font-mono text-slate-700 bg-white px-2.5 py-1 rounded border">
+                    <span className="font-semibold font-mono text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-950 px-2.5 py-1 rounded border dark:border-slate-850">
                       {customer.created_at ? new Date(customer.created_at).toLocaleDateString(undefined, { dateStyle: 'long' }) : '—'}
                     </span>
                   </div>
@@ -486,24 +486,24 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
           {activeTab === 'orders' && (
             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
               {orders.length === 0 ? (
-                <Card className="border border-dashed p-12 text-center text-slate-400 bg-slate-50/30 rounded-2xl">
-                  <ShoppingBag className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-                  <p className="font-bold text-slate-600">No orders found</p>
-                  <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">This customer profile exists but does not have any recorded transactions in TailorPro yet.</p>
+                <Card className="border border-dashed p-12 text-center text-slate-400 dark:text-slate-500 bg-slate-50/30 dark:bg-slate-900/20 rounded-2xl">
+                  <ShoppingBag className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+                  <p className="font-bold text-slate-600 dark:text-slate-350">No orders found</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 max-w-sm mx-auto">This customer profile exists but does not have any recorded transactions in TailorPro yet.</p>
                 </Card>
               ) : (
                 <div className="space-y-4">
                   {orders.map((o) => (
-                    <Card key={o.id} className="border border-border/80 hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all overflow-hidden rounded-xl bg-card group">
+                    <Card key={o.id} className="border border-border/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs hover:shadow-xs transition-all overflow-hidden rounded-xl bg-card group">
                       <div className="p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         
                         {/* Order Metadata */}
                         <div className="space-y-1.5 flex-1 min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-xs font-extrabold text-slate-800 bg-slate-100 px-2.5 py-0.5 rounded-md font-mono border">
+                            <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-md font-mono border dark:border-slate-700">
                               {o.order_number}
                             </span>
-                            <span className="text-[11px] font-bold bg-indigo-500/10 text-indigo-700 border border-indigo-500/20 px-2 py-0.5 rounded">
+                            <span className="text-[11px] font-bold bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 px-2 py-0.5 rounded">
                               {o.dress_type} ×{o.quantity}
                             </span>
                             <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold ${getStatusBadge(o.status)}`}>
@@ -511,11 +511,11 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                             </span>
                           </div>
                           
-                          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 font-semibold pt-1">
+                          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 dark:text-slate-500 font-semibold pt-1">
                             {o.delivery_date && (
                               <div className="flex items-center gap-1.5">
                                 <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                                <span>Delivery Due: <span className="text-slate-600">{new Date(o.delivery_date).toLocaleDateString()}</span></span>
+                                <span>Delivery Due: <span className="text-slate-600 dark:text-slate-300">{new Date(o.delivery_date).toLocaleDateString()}</span></span>
                               </div>
                             )}
                             <div className="flex items-center gap-1.5">
@@ -526,12 +526,12 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                         </div>
 
                         {/* View Button Link */}
-                        <div className="shrink-0 w-full md:w-auto border-t md:border-t-0 pt-3 md:pt-0 flex md:block justify-end">
+                        <div className="shrink-0 w-full md:w-auto border-t dark:border-slate-800 md:border-t-0 pt-3 md:pt-0 flex md:block justify-end">
                           <Link href={`/dashboard/orders/${o.id}`} className="w-full md:w-auto">
                             <Button 
                               variant="outline" 
                               size="sm"
-                              className="w-full md:w-auto text-xs font-semibold rounded-lg hover:bg-slate-50 flex items-center justify-center gap-1 border border-border"
+                              className="w-full md:w-auto text-xs font-semibold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-850 flex items-center justify-center gap-1 border border-border dark:border-slate-800"
                             >
                               Manage Order
                               <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
@@ -550,10 +550,10 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
           {activeTab === 'measurements' && (
             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
               {measurements.length === 0 ? (
-                <Card className="border border-dashed p-12 text-center text-slate-400 bg-slate-50/30 rounded-2xl">
-                  <Ruler className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-                  <p className="font-bold text-slate-600">No measurements recorded</p>
-                  <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">Please add measurement templates for this customer to begin customizing fits.</p>
+                <Card className="border border-dashed p-12 text-center text-slate-400 dark:text-slate-500 bg-slate-50/30 dark:bg-slate-900/20 rounded-2xl">
+                  <Ruler className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+                  <p className="font-bold text-slate-600 dark:text-slate-350">No measurements recorded</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 max-w-sm mx-auto">Please add measurement templates for this customer to begin customizing fits.</p>
                 </Card>
               ) : (
                 <div className="grid grid-cols-1 gap-6">
@@ -563,30 +563,30 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                       .join(', ');
 
                     return (
-                      <Card key={m.id} className="border border-border/80 shadow-2xs hover:shadow-xs transition-all rounded-xl bg-card overflow-hidden">
+                      <Card key={m.id} className="border border-border/80 dark:border-slate-800 shadow-2xs hover:shadow-xs transition-all rounded-xl bg-card overflow-hidden">
                         
                         {/* Header bar of measurements */}
-                        <div className="bg-slate-50/80 border-b border-border/60 px-5 py-4 flex flex-wrap justify-between items-center gap-3">
+                        <div className="bg-slate-50/80 dark:bg-slate-900/60 border-b border-border/60 dark:border-slate-800 px-5 py-4 flex flex-wrap justify-between items-center gap-3">
                           <div className="flex items-center gap-2.5">
                             <div className="p-1.5 bg-indigo-500/10 text-indigo-600 rounded-lg shrink-0">
                               <Ruler className="w-4 h-4" />
                             </div>
                             <div>
-                              <span className="text-xs font-bold font-mono text-slate-400">{m.measurement_code}</span>
-                              <span className="ml-3 inline-flex items-center rounded-md bg-indigo-500/15 px-2.5 py-0.5 text-xs font-bold text-indigo-800">
+                              <span className="text-xs font-bold font-mono text-slate-400 dark:text-slate-500">{m.measurement_code}</span>
+                              <span className="ml-3 inline-flex items-center rounded-md bg-indigo-500/15 px-2.5 py-0.5 text-xs font-bold text-indigo-800 dark:text-indigo-300">
                                 {m.dress_type}
                               </span>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-3 text-xs font-semibold">
-                            <span className="text-slate-400">{new Date(m.created_at).toLocaleDateString()}</span>
+                            <span className="text-slate-400 dark:text-slate-500">{new Date(m.created_at).toLocaleDateString()}</span>
                             {m.is_used_in_order ? (
-                              <span className="bg-slate-100 text-slate-500 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border">
+                              <span className="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border dark:border-slate-700">
                                 Locked
                               </span>
                             ) : (
-                              <span className="bg-emerald-500/10 text-emerald-700 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20">
+                              <span className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-450 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20 dark:border-emerald-500/30">
                                 Active / Edit
                               </span>
                             )}
@@ -594,7 +594,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                             {/* Copy measurements block trigger */}
                             <button 
                               onClick={() => handleCopy(measurementString, `meas_${m.id}`)}
-                              className="p-1 border bg-white text-slate-500 hover:text-slate-800 rounded-md transition-colors"
+                              className="p-1 border dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 rounded-md transition-colors"
                               title="Copy Measurement Specifications"
                             >
                               {copiedField === `meas_${m.id}` ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -606,9 +606,9 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                         <CardContent className="p-5">
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                             {Object.entries(m.measurement_data || {}).map(([k, v]) => (
-                              <div key={k} className="p-3 bg-slate-50/50 hover:bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-center min-w-0 transition-colors">
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate">{k}</span>
-                                <span className="text-sm font-extrabold text-slate-800 mt-1 truncate">{v as string}</span>
+                              <div key={k} className="p-3 bg-slate-50/50 dark:bg-slate-900/20 hover:bg-slate-50 dark:hover:bg-slate-900/40 rounded-xl border border-slate-100 dark:border-slate-800 flex flex-col justify-center min-w-0 transition-colors">
+                                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider truncate">{k}</span>
+                                <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 mt-1 truncate">{v as string}</span>
                               </div>
                             ))}
                           </div>

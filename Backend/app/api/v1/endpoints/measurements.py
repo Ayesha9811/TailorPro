@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from ....db.session import get_db
@@ -40,6 +40,7 @@ def get_measurement_templates(
 @router.post("/templates", response_model=dict)
 def create_custom_template(
     template: schemas.CustomTemplateCreate, 
+    request: Request,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(write_access)
 ):
@@ -55,11 +56,19 @@ def create_custom_template(
     setting.value = current_templates
     
     db.commit()
+    crud.create_activity_log(
+        db=db,
+        user_id=current_user.id,
+        action="Create Measurement Template",
+        details=f"Created custom measurement template for '{template.dress_type}'",
+        ip_address=request.client.host if request.client else None
+    )
     return {"message": "Template saved successfully"}
 
 @router.post("/", response_model=schemas.Measurement)
 def create_measurement(
     measurement: schemas.MeasurementCreate, 
+    request: Request,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(write_access)
 ):
@@ -67,18 +76,34 @@ def create_measurement(
     customer = crud.get_customer_by_id(db, measurement.customer_id)
     if not customer:
         raise HTTPException(status_code=404, detail="Customer not found")
-    return crud.create_measurement(db=db, measurement=measurement)
+    result = crud.create_measurement(db=db, measurement=measurement)
+    crud.create_activity_log(
+        db=db,
+        user_id=current_user.id,
+        action="Record Measurement",
+        details=f"Recorded '{result.dress_type}' measurements for customer ID {result.customer_id}",
+        ip_address=request.client.host if request.client else None
+    )
+    return result
 
 @router.put("/{measurement_id}", response_model=schemas.Measurement)
 def update_measurement(
     measurement_id: int, 
     update_data: schemas.MeasurementUpdate, 
+    request: Request,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(write_access)
 ):
     result = crud.update_measurement(db, measurement_id, update_data)
     if result is None:
         raise HTTPException(status_code=400, detail="Measurement not found or is immutable (linked to an order)")
+    crud.create_activity_log(
+        db=db,
+        user_id=current_user.id,
+        action="Update Measurement",
+        details=f"Updated '{result.dress_type}' measurements for customer ID {result.customer_id}",
+        ip_address=request.client.host if request.client else None
+    )
     return result
 
 @router.get("/customer/{customer_id}", response_model=List[schemas.Measurement])

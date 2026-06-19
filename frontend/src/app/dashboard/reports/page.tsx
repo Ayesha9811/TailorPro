@@ -568,49 +568,49 @@ export default function ReportsPage() {
 
       {/* Printable page header */}
       <div className="print-header">
-        <h2 className="text-xl font-bold text-slate-800">TailorPro Management ERP - Custom Reports Summary</h2>
-        <h3 className="text-base font-semibold text-slate-600 mt-1">{activeConfig.title}</h3>
-        <p className="text-xs text-slate-400 mt-0.5">Filter Range: {startDate} to {endDate} • Generated on {new Date().toLocaleString()}</p>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">TailorPro Management ERP - Custom Reports Summary</h2>
+        <h3 className="text-base font-semibold text-slate-600 dark:text-slate-350 mt-1">{activeConfig.title}</h3>
+        <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Filter Range: {startDate} to {endDate} • Generated on {new Date().toLocaleString()}</p>
       </div>
 
       {/* Main Header (Dashboard View Only) */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 no-print border-b pb-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 no-print border-b dark:border-slate-800 pb-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Financial & Production Reports</h1>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Financial & Production Reports</h1>
           <p className="text-slate-500 text-sm mt-1">Generate auditing data, tailor workload reviews, and monthly revenue summaries.</p>
         </div>
       </div>
 
       {/* Controls: Date Range Pickers & Preset buttons */}
-      <Card className="no-print shadow-sm border-slate-200 bg-white">
+      <Card className="no-print shadow-sm border-slate-200 dark:border-slate-800 bg-white dark:bg-card">
         <CardContent className="pt-6 grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
           <div className="space-y-2">
-            <Label className="text-slate-600 font-semibold text-xs uppercase">Start Date</Label>
+            <Label className="text-slate-600 dark:text-slate-300 font-semibold text-xs uppercase">Start Date</Label>
             <Input 
               type="date" 
               value={startDate} 
               onChange={(e) => setStartDate(e.target.value)} 
-              className="border-slate-200"
+              className="border-slate-200 dark:border-slate-850 dark:bg-slate-900 dark:text-slate-100"
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-slate-600 font-semibold text-xs uppercase">End Date</Label>
+            <Label className="text-slate-600 dark:text-slate-300 font-semibold text-xs uppercase">End Date</Label>
             <Input 
               type="date" 
               value={endDate} 
               onChange={(e) => setEndDate(e.target.value)} 
-              className="border-slate-200"
+              className="border-slate-200 dark:border-slate-850 dark:bg-slate-900 dark:text-slate-100"
             />
           </div>
 
           <div className="space-y-2 col-span-1 md:col-span-2">
-            <Label className="text-slate-600 font-semibold text-xs uppercase block mb-1">Predefined Filters</Label>
+            <Label className="text-slate-600 dark:text-slate-300 font-semibold text-xs uppercase block mb-1">Predefined Filters</Label>
             <div className="flex flex-wrap gap-2">
-              <Button size="sm" variant="outline" onClick={() => handlePreset('today')} className="text-xs font-semibold bg-white hover:bg-slate-50 text-slate-600 border-slate-200">Today</Button>
-              <Button size="sm" variant="outline" onClick={() => handlePreset('week')} className="text-xs font-semibold bg-white hover:bg-slate-50 text-slate-600 border-slate-200">7 Days</Button>
-              <Button size="sm" variant="outline" onClick={() => handlePreset('month')} className="text-xs font-semibold bg-white hover:bg-slate-50 text-slate-600 border-slate-200">30 Days</Button>
-              <Button size="sm" variant="outline" onClick={() => handlePreset('year')} className="text-xs font-semibold bg-white hover:bg-slate-50 text-slate-600 border-slate-200">This Year</Button>
-              <Button size="sm" onClick={generateReport} disabled={loading} className="text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 ml-auto gap-2">
+              <Button size="sm" variant="outline" onClick={() => handlePreset('today')} className="text-xs font-semibold bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800">Today</Button>
+              <Button size="sm" variant="outline" onClick={() => handlePreset('week')} className="text-xs font-semibold bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800">7 Days</Button>
+              <Button size="sm" variant="outline" onClick={() => handlePreset('month')} className="text-xs font-semibold bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800">30 Days</Button>
+              <Button size="sm" variant="outline" onClick={() => handlePreset('year')} className="text-xs font-semibold bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800">This Year</Button>
+              <Button size="sm" onClick={generateReport} disabled={loading} className="text-xs font-semibold bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 ml-auto gap-2">
                 <RefreshCw className={`h-3 w-3 ${loading ? 'animate-spin' : ''}`} /> Run Report
               </Button>
             </div>
@@ -622,8 +622,8 @@ export default function ReportsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
         
         {/* Sidebar Selector (Dashboard View Only) */}
-        <div className="lg:col-span-1 space-y-2 no-print bg-slate-50 border p-3 rounded-2xl">
-          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Available Reports</span>
+        <div className="lg:col-span-1 space-y-2 no-print bg-slate-50 dark:bg-slate-900/35 border dark:border-slate-800 p-3 rounded-2xl">
+          <span className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Available Reports</span>
           {reportsList.map((rep) => {
             const Icon = rep.icon;
             const isSelected = activeReport === rep.key;
@@ -636,11 +636,11 @@ export default function ReportsPage() {
                 }}
                 className={`w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
                   isSelected 
-                    ? 'bg-slate-900 text-white shadow-md font-bold scale-[1.02]' 
-                    : 'text-slate-600 hover:bg-slate-200/50 hover:text-slate-900 font-semibold'
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md font-bold scale-[1.02]' 
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/40 hover:text-slate-900 dark:hover:text-slate-200 font-semibold'
                 }`}
               >
-                <Icon className={`h-4.5 w-4.5 shrink-0 ${isSelected ? 'text-indigo-400' : 'text-slate-400'}`} />
+                <Icon className={`h-4.5 w-4.5 shrink-0 ${isSelected ? 'text-indigo-400' : 'text-slate-400 dark:text-slate-500'}`} />
                 <span className="text-xs truncate">{rep.title}</span>
               </button>
             );
@@ -649,15 +649,14 @@ export default function ReportsPage() {
 
         {/* Dynamic Display Board */}
         <div className="lg:col-span-3 space-y-6 print-report-container">
-          
-          {/* Active Report Title & Description */}
-          <div className="bg-white p-6 rounded-2xl border shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+               {/* Active Report Title & Description */}
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border dark:border-slate-800 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <div className="flex items-center gap-2">
                 <activeConfig.icon className="h-5 w-5 text-indigo-500 shrink-0" />
-                <h2 className="text-xl font-bold text-slate-800">{activeConfig.title}</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{activeConfig.title}</h2>
               </div>
-              <p className="text-xs text-slate-400 mt-1 font-medium">{activeConfig.description}</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">{activeConfig.description}</p>
             </div>
 
             {/* Print & Export Actions (Dashboard view only) */}
@@ -666,7 +665,7 @@ export default function ReportsPage() {
                 onClick={handlePrintReport} 
                 variant="outline" 
                 size="sm" 
-                className="gap-1.5 text-xs font-bold bg-white text-slate-700 hover:bg-slate-50 border-slate-200 shadow-sm"
+                className="gap-1.5 text-xs font-bold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 border-slate-200 dark:border-slate-700 shadow-sm"
               >
                 <Printer className="h-3.5 w-3.5" /> Print
               </Button>
@@ -675,7 +674,7 @@ export default function ReportsPage() {
                 disabled={reportData.length === 0} 
                 variant="outline" 
                 size="sm" 
-                className="gap-1.5 text-xs font-bold bg-white text-slate-700 hover:bg-slate-50 border-slate-200 shadow-sm"
+                className="gap-1.5 text-xs font-bold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 border-slate-200 dark:border-slate-700 shadow-sm"
               >
                 <Download className="h-3.5 w-3.5" /> Export CSV
               </Button>
@@ -684,7 +683,7 @@ export default function ReportsPage() {
                 disabled={reportData.length === 0 || loading} 
                 variant="outline" 
                 size="sm" 
-                className="gap-1.5 text-xs font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border-indigo-200 shadow-sm"
+                className="gap-1.5 text-xs font-bold bg-indigo-50 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 border-indigo-200 dark:border-indigo-900/50 shadow-sm"
               >
                 <Download className="h-3.5 w-3.5" /> Download PDF
               </Button>
@@ -695,10 +694,10 @@ export default function ReportsPage() {
           {metrics && (
             <div className="grid gap-4 grid-cols-2 md:grid-cols-3">
               {metrics.map((m, idx) => (
-                <Card key={idx} className="shadow-sm border-slate-100 bg-white">
+                <Card key={idx} className="shadow-sm border-slate-100 dark:border-slate-850 bg-white dark:bg-slate-900">
                   <CardContent className="py-4">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">{m.label}</span>
-                    <span className="text-xl font-black text-slate-800 mt-1 block">{m.value}</span>
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">{m.label}</span>
+                    <span className="text-xl font-black text-slate-800 dark:text-slate-100 mt-1 block">{m.value}</span>
                   </CardContent>
                 </Card>
               ))}
@@ -714,7 +713,7 @@ export default function ReportsPage() {
           )}
 
           {/* Report Data Table */}
-          <Card className="shadow-sm overflow-hidden">
+          <Card className="shadow-sm border-slate-200 dark:border-slate-800 overflow-hidden bg-card">
             <CardContent className="p-0">
               {loading ? (
                 <div className="text-center py-20 text-slate-400 font-medium">
@@ -722,13 +721,13 @@ export default function ReportsPage() {
                   Generating and aggregating data...
                 </div>
               ) : reportData.length === 0 ? (
-                <div className="text-center py-20 text-slate-400 text-sm font-semibold italic">
+                <div className="text-center py-20 text-slate-400 dark:text-slate-500 text-sm font-semibold italic">
                   No records found for the selected date range.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs text-left border-collapse">
-                    <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+                    <thead className="bg-slate-50 dark:bg-slate-900/60 border-b border-slate-100 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                       <tr>
                         {activeConfig.columns.map((col) => (
                           <th 
@@ -743,9 +742,9 @@ export default function ReportsPage() {
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 bg-white">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-950/20">
                       {reportData.map((row, rIdx) => (
-                        <tr key={rIdx} className="hover:bg-slate-50 transition-colors text-slate-700">
+                        <tr key={rIdx} className="hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors text-slate-700 dark:text-slate-300">
                           {activeConfig.columns.map((col) => {
                             const val = row[col.key];
                             const formattedVal = col.format ? col.format(val) : (val !== null && val !== undefined ? String(val) : '—');
@@ -759,14 +758,14 @@ export default function ReportsPage() {
                                 }`}
                               >
                                 {col.key === 'order_number' || col.key === 'invoice_number' ? (
-                                  <span className="font-bold text-slate-900">{formattedVal}</span>
+                                  <span className="font-bold text-slate-900 dark:text-white">{formattedVal}</span>
                                 ) : col.key === 'status' || col.key === 'payment_status' ? (
                                   <span className={`inline-flex items-center rounded-full px-2 py-0.5 font-semibold text-[10px] ${
                                     formattedVal.includes('Paid') || formattedVal.includes('Collected') || formattedVal.includes('Ready')
-                                      ? 'bg-green-50 text-green-700 border border-green-200'
+                                      ? 'bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-900/40'
                                       : formattedVal.includes('Partial') || formattedVal.includes('Stitching') || formattedVal.includes('Fitting')
-                                        ? 'bg-yellow-50 text-yellow-700 border border-yellow-200'
-                                        : 'bg-red-50 text-red-700 border border-red-200'
+                                        ? 'bg-yellow-50 dark:bg-yellow-950/20 text-yellow-700 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-900/40'
+                                        : 'bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/40'
                                   }`}>
                                     {formattedVal}
                                   </span>

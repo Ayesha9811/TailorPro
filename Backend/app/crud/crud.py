@@ -331,6 +331,142 @@ def create_unified_order(db: Session, payload: schemas.UnifiedOrderCreate, cashi
         db.rollback() # Rollback EVERYTHING if any step fails
         raise e
 
+def create_unified_bulk_order(db: Session, payload: schemas.UnifiedBulkOrderCreate, cashier_name: str = None):
+    try:
+        year = datetime.datetime.now().year
+        
+        # 1. Resolve Customer
+        if payload.customer_id:
+            db_customer = db.query(models.Customer).filter(models.Customer.id == payload.customer_id).first()
+            if not db_customer:
+                raise ValueError("Provided customer_id does not exist")
+        elif payload.customer:
+            # Auto-generate code
+            last_cust = db.query(models.Customer).filter(models.Customer.customer_code.like(f"CUST-{year}-%")).order_by(models.Customer.customer_code.desc()).first()
+            new_num = str(int(last_cust.customer_code.split("-")[-1]) + 1).zfill(4) if last_cust else "0001"
+            customer_code = f"CUST-{year}-{new_num}"
+            
+            db_customer = models.Customer(customer_code=customer_code, **payload.customer.model_dump())
+            db.add(db_customer)
+            db.flush() # flush to get ID without committing
+        else:
+            raise ValueError("Either customer_id or customer data must be provided")
+
+        created_orders = []
+        created_invoices = []
+        
+        # 2. Loop through each item in bulk orders list
+        for item in payload.orders:
+            # Resolve Measurement
+            meas_id = item.measurement_id
+            if not meas_id and item.measurement_data:
+                # Generate measurement code
+                last_meas = db.query(models.Measurement).filter(models.Measurement.measurement_code.like(f"MEAS-{year}-%")).order_by(models.Measurement.measurement_code.desc()).first()
+                new_meas_num = str(int(last_meas.measurement_code.split("-")[-1]) + 1).zfill(4) if last_meas else "0001"
+                
+                db_measurement = models.Measurement(
+                    measurement_code=f"MEAS-{year}-{new_meas_num}",
+                    customer_id=db_customer.id,
+                    dress_type=item.dress_type,
+                    measurement_data=item.measurement_data,
+                    notes=item.measurement_notes,
+                    is_used_in_order=True
+                )
+                db.add(db_measurement)
+                db.flush()
+                meas_id = db_measurement.id
+            elif meas_id:
+                # Lock existing measurement
+                db_meas = db.query(models.Measurement).filter(models.Measurement.id == meas_id).first()
+                if db_meas:
+                    db_meas.is_used_in_order = True
+                    db.flush()
+
+            # Create Order
+            last_order = db.query(models.Order).filter(models.Order.order_number.like(f"ORD-{year}-%")).order_by(models.Order.order_number.desc()).first()
+            new_ord_num = str(int(last_order.order_number.split("-")[-1]) + 1).zfill(4) if last_order else "0001"
+            
+            order_data = item.model_dump(exclude={"total_amount", "discount", "measurement_id", "measurement_data", "measurement_notes"})
+            db_order = models.Order(
+                order_number=f"ORD-{year}-{new_ord_num}",
+                customer_id=db_customer.id,
+                measurement_id=meas_id,
+                **order_data
+            )
+            db.add(db_order)
+            db.flush()
+            created_orders.append(db_order)
+
+            # Create Invoice
+            last_inv = db.query(models.Invoice).filter(models.Invoice.invoice_number.like(f"INV-{year}-%")).order_by(models.Invoice.invoice_number.desc()).first()
+            new_inv_num = str(int(last_inv.invoice_number.split("-")[-1]) + 1).zfill(4) if last_inv else "0001"
+            
+            db_invoice = models.Invoice(
+                invoice_number=f"INV-{year}-{new_inv_num}",
+                order_id=db_order.id,
+                total_amount=item.total_amount,
+                balance_amount=item.total_amount,
+                discount=item.discount,
+                cashier_name=cashier_name
+            )
+            db.add(db_invoice)
+            db.flush()
+            created_invoices.append(db_invoice)
+
+        # 3. Process Advance Payment (split sequentially across invoices)
+        remaining_advance = payload.advance_payment
+        if remaining_advance > 0:
+            total_bill = sum(inv.total_amount for inv in created_invoices)
+            if remaining_advance > total_bill:
+                raise ValueError("Advance payment cannot exceed cumulative total amount of all orders")
+
+            for db_invoice in created_invoices:
+                if remaining_advance <= 0:
+                    break
+                
+                # Apply payment up to invoice balance
+                payment_to_apply = min(remaining_advance, db_invoice.balance_amount)
+                if payment_to_apply > 0:
+                    db_payment = models.Payment(
+                        invoice_id=db_invoice.id,
+                        amount=payment_to_apply,
+                        method=payload.payment_method,
+                        cashier_name=cashier_name
+                    )
+                    db.add(db_payment)
+                    
+                    db_invoice.paid_amount += payment_to_apply
+                    db_invoice.balance_amount -= payment_to_apply
+                    
+                    if db_invoice.balance_amount <= 0:
+                        db_invoice.payment_status = models.PaymentStatus.FULLY_PAID
+                    else:
+                        db_invoice.payment_status = models.PaymentStatus.PARTIALLY_PAID
+                    
+                    remaining_advance -= payment_to_apply
+                    db.flush()
+
+        # Commit transaction
+        db.commit()
+        
+        # Refresh all created orders
+        for o in created_orders:
+            db.refresh(o)
+
+        # Send notifications
+        try:
+            from app.services import notifications
+            for db_order in created_orders:
+                notifications.send_order_confirmation_notification(db, db_order)
+        except Exception as e:
+            print(f"Notification error: {e}", flush=True)
+
+        return created_orders
+
+    except Exception as e:
+        db.rollback()
+        raise e
+
 # Payment CRUD
 def create_payment(db: Session, payment: schemas.PaymentCreate, cashier_name: str = None):
     db_invoice = db.query(models.Invoice).filter(models.Invoice.id == payment.invoice_id).first()
@@ -533,5 +669,25 @@ def get_notification_outbox(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.NotificationOutbox).order_by(
         models.NotificationOutbox.created_at.desc()
     ).offset(skip).limit(limit).all()
+
+
+# Activity Logs CRUD
+def create_activity_log(db: Session, user_id: int, action: str, details: str = None, ip_address: str = None):
+    db_log = models.ActivityLog(
+        user_id=user_id,
+        action=action,
+        details=details,
+        ip_address=ip_address
+    )
+    db.add(db_log)
+    db.commit()
+    db.refresh(db_log)
+    return db_log
+
+def get_activity_logs(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.ActivityLog).order_by(
+        models.ActivityLog.created_at.desc()
+    ).offset(skip).limit(limit).all()
+
 
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import List
 from ....db.session import get_db
@@ -12,11 +12,20 @@ router = APIRouter()
 @router.post("/", response_model=schemas.Customer)
 def create_customer(
     customer: schemas.CustomerCreate, 
+    request: Request,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(deps.RoleChecker(["Super Admin", "Owner / Manager", "CEO", "Tailor"]))
 ):
     # Customers can share contact numbers, so we no longer block based on contact_number.
-    return crud.create_customer(db=db, customer=customer)
+    result = crud.create_customer(db=db, customer=customer)
+    crud.create_activity_log(
+        db=db,
+        user_id=current_user.id,
+        action="Create Customer",
+        details=f"Registered customer {result.full_name} ({result.contact_number})",
+        ip_address=request.client.host if request.client else None
+    )
+    return result
 
 @router.get("/", response_model=List[schemas.Customer])
 def read_customers(

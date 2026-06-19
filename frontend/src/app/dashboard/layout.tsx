@@ -8,7 +8,7 @@ import { api } from '@/lib/api';
 import { 
   LayoutDashboard, Users, Ruler, ShoppingBag, Receipt, 
   Settings, LogOut, BarChart3, UserCheck, Bell, Check, CheckCheck, ShieldAlert,
-  Sun, Moon, PlusCircle
+  Sun, Moon, PlusCircle, History
 } from 'lucide-react';
 
 const navItems = [
@@ -21,6 +21,7 @@ const navItems = [
   { name: 'Notifications', href: '/dashboard/notifications', icon: Bell },
   { name: 'Users', href: '/dashboard/users', icon: UserCheck },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+  { name: 'Staff Tracking', href: '/dashboard/staff-tracking', icon: History },
 ];
 
 import { defaultRolePermissions } from '@/lib/permissions';

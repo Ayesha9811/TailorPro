@@ -317,7 +317,7 @@ export default function SettingsPage() {
                         onChange={(e) => setCompanyDetails({ ...companyDetails, address: e.target.value })}
                         placeholder="e.g. 123 Galle Road, Colombo 03, Sri Lanka"
                         disabled={!canEditCompany}
-                        className="w-full min-h-[80px] rounded-md border border-input bg-transparent px-3 py-2 pl-9 text-sm shadow-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                        className="w-full min-h-[80px] rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 px-3 py-2 pl-9 text-sm shadow-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                         required
                       />
                     </div>
@@ -332,7 +332,7 @@ export default function SettingsPage() {
                       onChange={(e) => setCompanyDetails({ ...companyDetails, description: e.target.value })}
                       placeholder="e.g. Thank you for your business! Items left past 30 days will be discarded."
                       disabled={!canEditCompany}
-                      className="w-full min-h-[60px] rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                      className="w-full min-h-[60px] rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 px-3 py-2 text-sm shadow-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     />
                   </div>
 

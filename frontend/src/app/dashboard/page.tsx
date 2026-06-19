@@ -354,7 +354,7 @@ export default function DashboardPage() {
                   </div>
                   
                   <div className="flex flex-col items-center p-2 rounded-lg hover:bg-secondary/40 cursor-default transition-all duration-200 group/legend hover:scale-105">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-primary dark:text-primary-foreground group-hover/legend:scale-105 transition-transform">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-primary group-hover/legend:scale-105 transition-transform">
                       <span className="h-3 w-3 rounded-full bg-primary inline-block animate-pulse" />
                       <span>Men/Gent</span>
                     </div>

@@ -245,6 +245,34 @@ class UnifiedOrderCreate(BaseModel):
     advance_payment: float = 0.0
     payment_method: PaymentMethod = PaymentMethod.CASH
 
+class UnifiedBulkOrderItem(BaseModel):
+    category: GenderCategory
+    dress_type: str
+    quantity: int = 1
+    fabric_source: Optional[str] = None
+    fabric_details: Optional[str] = None
+    special_remarks: Optional[str] = None
+    delivery_date: Optional[datetime] = None
+    total_amount: float
+    discount: float = 0.0
+    
+    # Measurement details per item
+    measurement_id: Optional[int] = None
+    measurement_data: Optional[Dict[str, Any]] = None
+    measurement_notes: Optional[str] = None
+
+class UnifiedBulkOrderCreate(BaseModel):
+    # Customer Selection (Same for all orders in bulk)
+    customer_id: Optional[int] = None
+    customer: Optional[CustomerCreate] = None
+    
+    # List of orders
+    orders: List[UnifiedBulkOrderItem]
+    
+    # Unified Financials
+    advance_payment: float = 0.0
+    payment_method: PaymentMethod = PaymentMethod.CASH
+
 # User management extensions
 class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
@@ -323,6 +351,34 @@ class NotificationOutbox(NotificationOutboxBase):
     id: int
     created_at: datetime
     sent_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+# ActivityLog Schemas
+class ActivityLogBase(BaseModel):
+    action: str
+    details: Optional[str] = None
+    ip_address: Optional[str] = None
+
+class ActivityLogCreate(ActivityLogBase):
+    user_id: Optional[int] = None
+
+class ActivityLogUserResponse(BaseModel):
+    id: int
+    full_name: str
+    email: str
+    role_name: Optional[str] = None
+
+class ActivityLogResponse(BaseModel):
+    id: int
+    user_id: Optional[int] = None
+    action: str
+    details: Optional[str] = None
+    ip_address: Optional[str] = None
+    created_at: datetime
+    user: Optional[ActivityLogUserResponse] = None
 
     class Config:
         from_attributes = True

@@ -468,7 +468,7 @@ function InvoicesPageContent() {
               <div>
                 <label className="text-xs font-bold text-slate-500 uppercase block mb-1">Payment Amount (LKR)</label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500 dark:text-slate-400 select-none">Rs.</span>
                   <Input 
                     type="number" 
                     step="0.01"
@@ -476,7 +476,7 @@ function InvoicesPageContent() {
                     value={payAmount} 
                     onChange={(e) => setPayAmount(e.target.value)} 
                     placeholder="e.g. 5000" 
-                    className="pl-9 font-bold text-slate-800 text-base"
+                    className="pl-10 font-bold text-slate-800 dark:text-slate-100 text-base dark:bg-slate-900 dark:border-slate-800"
                     required 
                   />
                 </div>

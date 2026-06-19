@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import List
 from ....db.session import get_db
@@ -20,6 +20,7 @@ read_access = deps.RoleChecker(allowed_read_roles)
 @router.post("/", response_model=schemas.Payment)
 def create_payment(
     payment: schemas.PaymentCreate,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(write_access)
 ):
@@ -27,6 +28,16 @@ def create_payment(
     result = crud.create_payment(db=db, payment=payment, cashier_name=current_user.full_name)
     if not result:
         raise HTTPException(status_code=404, detail="Invoice not found")
+    
+    # Audit log
+    order_num = result.invoice.order.order_number if (result.invoice and result.invoice.order) else "Unknown"
+    crud.create_activity_log(
+        db=db,
+        user_id=current_user.id,
+        action="Collect Payment",
+        details=f"Collected payment of Rs. {result.amount:,.2f} via {result.method.value} for order {order_num}",
+        ip_address=request.client.host if request.client else None
+    )
     
     # Trigger in-app notification
     try:

@@ -125,16 +125,16 @@ export default function CustomerForm() {
         </div>
 
         {showSuggestions && existingCustomers.length > 0 && (
-          <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 animate-in fade-in slide-in-from-top-2">
-            <h4 className="text-sm font-semibold text-blue-900 mb-2">
+          <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/50 rounded-lg p-4 animate-in fade-in slide-in-from-bottom-2">
+            <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-2">
               Existing customers found with this number:
             </h4>
             <div className="space-y-2">
               {existingCustomers.map((cust) => (
-                <div key={cust.id} className="flex items-center justify-between bg-white p-3 rounded-md shadow-sm border border-blue-50">
+                <div key={cust.id} className="flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-md shadow-sm border border-blue-50 dark:border-slate-800">
                   <div>
-                    <p className="font-medium text-gray-900">{cust.full_name}</p>
-                    <p className="text-xs text-gray-500">{cust.customer_code} • {cust.gender_category}</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{cust.full_name}</p>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">{cust.customer_code} • {cust.gender_category}</p>
                   </div>
                   <Button type="button" variant="outline" size="sm" onClick={() => navigateToCustomer(cust.id)}>
                     View Profile
@@ -142,7 +142,7 @@ export default function CustomerForm() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-blue-700 mt-3 font-medium">
+            <p className="text-xs text-blue-700 dark:text-blue-300 mt-3 font-medium">
               You can still create a completely new independent customer profile using this same number below.
             </p>
           </div>
@@ -256,10 +256,10 @@ export default function CustomerForm() {
               <div className="space-y-2">
                 <Label className="text-xs font-bold text-foreground">Gender Category *</Label>
                 <Select value={formData.gender_category} onValueChange={handleGenderChange}>
-                  <SelectTrigger className="bg-background border-border text-foreground rounded-lg">
+                  <SelectTrigger className="bg-background border-border dark:border-slate-800 text-foreground rounded-lg">
                     <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800">
                     <SelectItem value="Men">Men</SelectItem>
                     <SelectItem value="Ladies">Ladies</SelectItem>
                     <SelectItem value="Kids">Kids</SelectItem>

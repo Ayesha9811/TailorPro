@@ -199,43 +199,43 @@ export default function UsersPage() {
       {/* Header and Add button */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Staff & Users</h1>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Staff & Users</h1>
           <p className="text-slate-500 text-sm mt-1">Manage tailor, cashier, and management accounts.</p>
         </div>
-        <Button onClick={openAddModal} className="bg-slate-900 text-white hover:bg-slate-800 shadow-md font-semibold gap-2">
+        <Button onClick={openAddModal} className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 shadow-md font-bold gap-2">
           <Plus className="h-4 w-4" /> Add Staff User
         </Button>
       </div>
 
       {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="shadow-sm border-slate-200">
+        <Card className="shadow-sm border-slate-200 dark:border-slate-800 bg-card">
           <CardHeader className="flex flex-row items-center justify-between pb-1">
-            <CardTitle className="text-xs font-semibold text-slate-500 uppercase">Total Accounts</CardTitle>
+            <CardTitle className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Total Accounts</CardTitle>
             <Users className="h-4 w-4 text-slate-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-slate-800">{totalStaff}</div>
+            <div className="text-2xl font-bold text-slate-800 dark:text-slate-100">{totalStaff}</div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border-slate-200 bg-green-50/20">
+        <Card className="shadow-sm border-slate-200 dark:border-slate-800 bg-green-50/20 dark:bg-green-950/10">
           <CardHeader className="flex flex-row items-center justify-between pb-1">
-            <CardTitle className="text-xs font-semibold text-green-700 uppercase">Active Accounts</CardTitle>
+            <CardTitle className="text-xs font-semibold text-green-700 dark:text-green-400 uppercase">Active Accounts</CardTitle>
             <UserCheck className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-800">{activeStaff}</div>
+            <div className="text-2xl font-bold text-green-800 dark:text-green-300">{activeStaff}</div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border-slate-200">
+        <Card className="shadow-sm border-slate-200 dark:border-slate-800 bg-card">
           <CardHeader className="flex flex-row items-center justify-between pb-1">
-            <CardTitle className="text-xs font-semibold text-slate-500 uppercase">Total Tailors</CardTitle>
+            <CardTitle className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Total Tailors</CardTitle>
             <Plus className="h-4 w-4 text-slate-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-slate-800">{tailorsCount}</div>
+            <div className="text-2xl font-bold text-slate-800 dark:text-slate-100">{tailorsCount}</div>
           </CardContent>
         </Card>
       </div>
@@ -248,8 +248,8 @@ export default function UsersPage() {
       )}
 
       {/* Search and Table */}
-      <Card className="shadow-sm">
-        <CardHeader className="pb-3 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <Card className="shadow-sm border-slate-200 dark:border-slate-800 bg-card">
+        <CardHeader className="pb-3 border-b dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <CardTitle className="text-lg">Staff Directory</CardTitle>
           <div className="relative w-full sm:w-72">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -265,7 +265,7 @@ export default function UsersPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left border-collapse">
-              <thead className="bg-slate-50 text-slate-500 font-semibold border-b">
+              <thead className="bg-slate-50 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 font-semibold border-b dark:border-slate-800">
                 <tr>
                   <th className="px-6 py-4">Full Name</th>
                   <th className="px-6 py-4">Email</th>
@@ -275,7 +275,7 @@ export default function UsersPage() {
                   <th className="px-6 py-4 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {filteredUsers.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="px-6 py-8 text-center text-slate-400">
@@ -284,35 +284,35 @@ export default function UsersPage() {
                   </tr>
                 ) : (
                   filteredUsers.map((u) => (
-                    <tr key={u.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-slate-900">{u.full_name}</td>
-                      <td className="px-6 py-4 text-slate-600">{u.email}</td>
+                    <tr key={u.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors">
+                      <td className="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">{u.full_name}</td>
+                      <td className="px-6 py-4 text-slate-600 dark:text-slate-300">{u.email}</td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1">
                           <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                            u.role_name === 'Super Admin' ? 'bg-red-50 text-red-700 border border-red-200' :
-                            u.role_name === 'Owner / Manager' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
-                            u.role_name === 'CEO' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' :
-                            u.role_name === 'Finance' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
-                            u.role_name === 'Cashier' ? 'bg-green-50 text-green-700 border border-green-200' :
-                            u.role_name === 'Tailor' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
-                            'bg-slate-50 text-slate-700 border border-slate-200'
+                            u.role_name === 'Super Admin' ? 'bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/40' :
+                            u.role_name === 'Owner / Manager' ? 'bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/40' :
+                            u.role_name === 'CEO' ? 'bg-indigo-50 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900/40' :
+                            u.role_name === 'Finance' ? 'bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900/40' :
+                            u.role_name === 'Cashier' ? 'bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-900/40' :
+                            u.role_name === 'Tailor' ? 'bg-purple-50 dark:bg-purple-950/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900/40' :
+                            'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
                           }`}>
                             {u.role_name}
                           </span>
                           {u.permissions && u.permissions.length > 0 && (
-                            <span className="text-[10px] text-indigo-500 font-bold tracking-tight">
+                            <span className="text-[10px] text-indigo-550 dark:text-indigo-400 font-bold tracking-tight">
                               Custom: {u.permissions.length} pages
                             </span>
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-slate-500">{u.staff?.mobile_number || 'N/A'}</td>
+                      <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{u.staff?.mobile_number || 'N/A'}</td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                           u.is_active 
-                            ? 'bg-green-50 text-green-700 border border-green-100' 
-                            : 'bg-red-50 text-red-700 border border-red-100'
+                            ? 'bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border border-green-100 dark:border-green-900/40' 
+                            : 'bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border border-red-100 dark:border-red-900/40'
                         }`}>
                           {u.is_active ? 'Active' : 'Inactive'}
                         </span>
@@ -321,7 +321,7 @@ export default function UsersPage() {
                         <div className="flex justify-center gap-2">
                           <button
                             onClick={() => openEditModal(u)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
                             title="Edit profile"
                           >
                             <Edit2 className="h-4 w-4" />
@@ -329,7 +329,7 @@ export default function UsersPage() {
                           {u.is_active && u.role_name !== 'Super Admin' && (
                             <button
                               onClick={() => handleDeactivate(u.id)}
-                              className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
+                              className="p-1.5 rounded-lg text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
                               title="Deactivate account"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -349,8 +349,8 @@ export default function UsersPage() {
       {/* Add/Edit Modal dialog */}
       {isOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-xl overflow-hidden border animate-in zoom-in-95 duration-200">
-            <div className="bg-slate-950 text-white px-6 py-4 flex justify-between items-center">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
+            <div className="bg-slate-950 text-white px-6 py-4 flex justify-between items-center border-b border-slate-800">
               <h3 className="font-bold text-lg">{isEditMode ? 'Edit Staff Profile' : 'Register New Staff User'}</h3>
               <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-white transition-colors">
                 <X className="h-5 w-5" />
@@ -360,22 +360,22 @@ export default function UsersPage() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2 sm:col-span-1">
-                  <label className="text-xs font-bold text-slate-500 uppercase block mb-1">Full Name</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Full Name</label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 animate-in fade-in" />
                     <Input 
                       type="text" 
                       value={fullName} 
                       onChange={(e) => setFullName(e.target.value)} 
                       placeholder="e.g. Kamal Perera" 
-                      className="pl-9"
+                      className="pl-9 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-850"
                       required 
                     />
                   </div>
                 </div>
 
                 <div className="col-span-2 sm:col-span-1">
-                  <label className="text-xs font-bold text-slate-500 uppercase block mb-1">Email (Username)</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Email (Username)</label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                     <Input 
@@ -383,33 +383,33 @@ export default function UsersPage() {
                       value={email} 
                       onChange={(e) => setEmail(e.target.value)} 
                       placeholder="e.g. kamal@tailorpro.com" 
-                      className="pl-9"
+                      className="pl-9 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-850"
                       required 
                     />
                   </div>
                 </div>
 
                 <div className="col-span-2 sm:col-span-1">
-                  <label className="text-xs font-bold text-slate-500 uppercase block mb-1">Password</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Password</label>
                   <div className="relative">
                     <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                     <Input 
                       type="password" 
                       value={password} 
                       onChange={(e) => setPassword(e.target.value)} 
-                      placeholder={isEditMode ? '•••••••• (leave blank to keep same)' : 'Minimum 6 chars'} 
-                      className="pl-9"
+                      placeholder={isEditMode ? '•••••••• (leave blank)' : 'Minimum 6 chars'} 
+                      className="pl-9 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-850"
                       required={!isEditMode} 
                     />
                   </div>
                 </div>
 
                 <div className="col-span-2 sm:col-span-1">
-                  <label className="text-xs font-bold text-slate-500 uppercase block mb-1">Staff Role</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Staff Role</label>
                   <select 
                     value={roleId} 
                     onChange={(e) => handleRoleChange(Number(e.target.value))} 
-                    className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-800"
+                    className="w-full rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 dark:focus:ring-slate-700 text-slate-800 dark:text-slate-200 font-semibold"
                   >
                     {roles.map(r => (
                       <option key={r.id} value={r.id}>{r.name}</option>
@@ -418,7 +418,7 @@ export default function UsersPage() {
                 </div>
 
                 <div className="col-span-2 sm:col-span-1">
-                  <label className="text-xs font-bold text-slate-500 uppercase block mb-1">Mobile Contact</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1">Mobile Contact</label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                     <Input 
@@ -426,7 +426,7 @@ export default function UsersPage() {
                       value={mobileNumber} 
                       onChange={(e) => setMobileNumber(e.target.value)} 
                       placeholder="e.g. 0717654321" 
-                      className="pl-9"
+                      className="pl-9 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-850"
                     />
                   </div>
                 </div>
@@ -437,34 +437,34 @@ export default function UsersPage() {
                       type="checkbox" 
                       checked={isActive} 
                       onChange={(e) => setIsActive(e.target.checked)} 
-                      className="h-4.5 w-4.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
+                      className="h-4.5 w-4.5 rounded border-slate-350 dark:border-slate-800 text-slate-900 dark:text-white dark:bg-slate-900 focus:ring-slate-900 dark:focus:ring-slate-700 cursor-pointer"
                     />
-                    <span className="text-sm font-semibold text-slate-700">Account is Active</span>
+                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Account is Active</span>
                   </label>
                 </div>
 
                 {/* Customizable Accessible Pages & Permissions */}
-                <div className="col-span-2 border-t pt-4">
-                  <span className="text-xs font-bold text-slate-500 uppercase block mb-3">Custom Accessible Pages / Permissions</span>
-                  <div className="overflow-x-auto bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <table className="w-full text-left text-xs font-semibold text-slate-700">
+                <div className="col-span-2 border-t dark:border-slate-800 pt-4">
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-3">Custom Accessible Pages / Permissions</span>
+                  <div className="overflow-x-auto bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+                    <table className="w-full text-left text-xs font-semibold text-slate-700 dark:text-slate-300">
                       <thead>
-                        <tr className="border-b text-slate-500 font-bold uppercase tracking-wider">
+                        <tr className="border-b dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">
                           <th className="pb-2">Module / Page</th>
                           <th className="pb-2 text-center w-24">View</th>
                           <th className="pb-2 text-center w-24">Edit</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-200/60">
+                      <tbody className="divide-y divide-slate-200/60 dark:divide-slate-850">
                         {AVAILABLE_PERMISSIONS.map((perm) => {
                           const hasView = selectedPermissions.includes(perm.path);
                           const hasEdit = selectedPermissions.includes(`edit:${perm.path}`);
                           
                           // Hide or disable edit toggle for read-only pages like Dashboard and Reports
                           const isEditApplicable = perm.path !== '/dashboard' && perm.path !== '/dashboard/reports';
-
+ 
                           return (
-                            <tr key={perm.path} className="hover:bg-slate-200/30">
+                            <tr key={perm.path} className="hover:bg-slate-200/30 dark:hover:bg-slate-850/40">
                               <td className="py-2.5 font-bold">{perm.name}</td>
                               <td className="py-2.5 text-center">
                                 <input
@@ -478,7 +478,7 @@ export default function UsersPage() {
                                       setSelectedPermissions(prev => prev.filter(p => p !== perm.path && p !== `edit:${perm.path}`));
                                     }
                                   }}
-                                  className="h-4.5 w-4.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer"
+                                  className="h-4.5 w-4.5 rounded border-slate-350 dark:border-slate-800 text-slate-900 dark:text-white dark:bg-slate-900 focus:ring-slate-900 dark:focus:ring-slate-700 cursor-pointer"
                                 />
                               </td>
                               <td className="py-2.5 text-center">
@@ -494,10 +494,10 @@ export default function UsersPage() {
                                         setSelectedPermissions(prev => prev.filter(p => p !== `edit:${perm.path}`));
                                       }
                                     }}
-                                    className="h-4.5 w-4.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                                    className="h-4.5 w-4.5 rounded border-slate-350 dark:border-slate-800 text-slate-900 dark:text-white dark:bg-slate-900 focus:ring-slate-900 dark:focus:ring-slate-700 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                                   />
                                 ) : (
-                                  <span className="text-slate-400 font-normal">N/A</span>
+                                  <span className="text-slate-400 dark:text-slate-500 font-normal">N/A</span>
                                 )}
                               </td>
                             </tr>
@@ -508,19 +508,19 @@ export default function UsersPage() {
                   </div>
                 </div>
               </div>
-
-              <div className="pt-4 border-t flex justify-end gap-3">
+ 
+              <div className="pt-4 border-t dark:border-slate-800 flex justify-end gap-3">
                 <Button 
                   type="button" 
                   variant="outline" 
                   onClick={() => setIsOpen(false)}
-                  className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold"
+                  className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold"
                 >
                   Cancel
                 </Button>
                 <Button 
                   type="submit" 
-                  className="bg-slate-900 text-white hover:bg-slate-800 font-semibold"
+                  className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 font-bold"
                 >
                   {isEditMode ? 'Save Changes' : 'Register User'}
                 </Button>
